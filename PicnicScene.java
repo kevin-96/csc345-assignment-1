@@ -75,6 +75,10 @@ public class PicnicScene extends JPanel {
         g2.setPaint(new Color(124, 252, 0));
         g2.fillRect(0, getHeight() / 2, getWidth(), getHeight() / 2); // From the old graphics API!
 
+        g2.setPaint(new Color(248,24,148));//hot pink
+        g2.setStroke(new BasicStroke(2 * pixelSize));
+        // Draw y-axis and its tick marks
+
         /*
          * Here, I set up a new coordinate system on the drawing area, by calling the
          * applyLimits() method that is defined below. Without this call, I would be
@@ -106,7 +110,7 @@ public class PicnicScene extends JPanel {
       drawLake(g2);
       drawSeeSaw(g2);
       drawTree(g2);
-      drawSun(g2);
+
     }
 
     private void drawLake(Graphics2D g2) {
@@ -114,46 +118,66 @@ public class PicnicScene extends JPanel {
         g2.setPaint(new Color(0,0,255)); // Blue
         Path2D lake = new Path2D.Double();
         lake.moveTo(1000, 0); // These coordinates were used because that was the frame
-        lake.curveTo(500, -400, 500, -400, 0, 0); // of reference when I drew them in a separate drawing program!
+        lake.curveTo(916, 0, 833.4, 0, 750, -250); // of reference when I drew them in a separate drawing program!
+        lake.curveTo(666.7, 0, 583.4, 0, 500, -400); // of reference when I drew them in a separate drawing program!
+        lake.curveTo(416.7, 0, 333.4, 0, 250, -250); // of reference when I drew them in a separate drawing program!
+        lake.curveTo(166.7, 0, 8, -0, 0, 0); // of reference when I drew them in a separate drawing program!
         lake.closePath();
-        g2.scale(0.05, 0.03); // Big lake needs to shrink a bit
-        g2.translate(-300, 725); // Center it a little more around original origin
+        g2.scale(0.03, 0.03); // Big lake needs to shrink a bit
+        g2.translate(-250, 725); // Center it a little more around original origin
         g2.fill(lake); // Now draw it
-        g2.setTransform(cs);
-    }
 
-    private void drawSun(Graphics2D g2){
-        AffineTransform cs = g2.getTransform();
-        int sunHeight = 10;
-        g2.scale(4,4.3);
-        g2.setPaint(new Color(255, 255, 0, 255)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(4, sunHeight, 1.7, 1.7)); // lower left X, lower left Y, width, height
 
-        g2.setPaint(new Color(255, 255, 0, 204)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.8, sunHeight-.2, 2.1, 2.1)); // lower left X, lower left Y, width, height
-        
-        g2.setPaint(new Color(255, 255, 0, 153)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.6, sunHeight-.4, 2.5, 2.5)); // lower left X, lower left Y, width, height
-        
-        g2.setPaint(new Color(255, 255, 0, 102)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.4, sunHeight-.6, 2.9, 2.9)); // lower left X, lower left Y, width, height
-        
-        g2.setPaint(new Color(255, 255, 0, 51)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.2, sunHeight-.8, 3.3, 3.3)); // lower left X, lower left Y, width, height
-        
+
+
         g2.setTransform(cs);
     }
 
     private void drawSeeSaw(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
+     
+//base
         g2.setPaint(new Color(58,95,11));
         Path2D base = new Path2D.Double();
-        base.moveTo(100, 200);
-        base.moveTo(200, 0);
-        base.moveTo(0, 0);
+        g2.setStroke(new BasicStroke(4 * pixelSize));
+        base.moveTo(-8.5, 2.5);
+        base.lineTo(-3.5, 2.5);
+        base.lineTo(-6, 6);
         base.closePath();
-        g2.draw(base);
-        g2.scale(4, 4);
+        g2.fill(base);
+
+           //seesaw
+           g2.setPaint(new Color(248,24,148));//hot pink
+           g2.setStroke(new BasicStroke(1));
+      
+          g2.draw(new Line2D.Double(-14, 4, 3, 8.65));
+
+        
+      //Left person 
+      g2.setStroke(new BasicStroke(15 * pixelSize));
+      g2.setColor(Color.BLACK);
+      g2.draw(new Line2D.Double(-11.32, 10.25, -11.32, 4.65));
+      g2.draw(new Line2D.Double(-11.32, 9, -8.32, 5.6));
+      g2.draw(new Line2D.Double(-11.32, 4.65, -9.32, 3.6));
+      g2.draw(new Line2D.Double(-9.32, 3.6, -11.32, 2.6));
+      g2.fill(new  Ellipse2D.Double(-14,10,5.5,5.5));
+      g2.setColor(Color.WHITE);
+      g2.fill(new  Ellipse2D.Double(-13.75,10.25,5,5));
+     
+       
+    //right person
+    g2.setColor(Color.BLACK);
+    g2.draw(new Line2D.Double(2.6,14,2.6,8.5));
+    g2.draw(new Line2D.Double(2.6,13.5,.6,8.5));
+    g2.draw(new Line2D.Double(2.6,8.5,2,6.5));
+    g2.draw(new Line2D.Double(2,6.5,1.8,4.5));
+
+
+    g2.fill(new  Ellipse2D.Double(-0.25,14,5.5,5.5));
+    g2.setColor(Color.WHITE);
+    g2.fill(new  Ellipse2D.Double(-0,14.25,5,5));
+
+       // g2.scale(4, 4);
         // g2.translate(2, 0);
         g2.setTransform(cs);
         //g2.drawPolygon(xPoints, yPoints, nPoints);
@@ -164,9 +188,19 @@ public class PicnicScene extends JPanel {
     }
 private void drawTree(Graphics2D g2){
     AffineTransform cs = g2.getTransform();
+    Path2D Trunk = new Path2D.Double();
+    g2.setPaint(new Color(83,53,10)); //brown
+    g2.setStroke(new BasicStroke(4 * pixelSize));
+    Trunk.moveTo(-18.5,17.5);
+    //Trunk.curveTo(-12, 5.5, -9, 7.5, 0, 0);
+    Trunk.lineTo(-18.5,7.5);
+ 
+    Trunk.closePath();
+    g2.draw(Trunk);
     g2.setPaint(new Color(58,95,11)); // dark green
-    g2.fill(new Ellipse2D.Double(-17, 16.5, 13, 13));
+    g2.fill(new Ellipse2D.Double(-21.5, 16.5, 12, 12));
     g2.setTransform(cs);
+
     
 
 }
