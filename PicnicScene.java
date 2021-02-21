@@ -112,7 +112,7 @@ public class PicnicScene extends JPanel {
       drawTree(g2);
       drawSun(g2);
       drawBird(g2);
-
+drawBlanket(g2);
     }
 
     private void drawLake(Graphics2D g2) {
@@ -139,6 +139,47 @@ public class PicnicScene extends JPanel {
         g2.setTransform(cs);
         
     }
+  
+  private void drawBag(Graphics2D g2) {
+      AffineTransform cs = g2.getTransform();
+//      Arc2D arc=new Arc2D.Double(10, 35, .5, .25, 0, -180,Arc2D.OPEN);
+      g2.setPaint(Color.BLACK);
+    //  g2.drawArc(10, 35, 1, 1, -20, -200);
+//      g2.draw(arc);
+    
+    //   g2.rotate(Math.PI/4);
+      //g2.translate(10,35);
+      g2.setTransform(cs);
+    
+  }
+  
+  private void drawBlanket(Graphics2D g2) {
+    AffineTransform cs = g2.getTransform();
+    g2.setPaint(Color.GRAY);
+    
+    g2.shear(.8, 0);
+    
+    g2.translate(6, 1);
+    
+    g2.fillRect(0, 0, 10, 12);
+    
+    g2.shear(-.8, 0);
+    
+    g2.translate(5, 5);
+    
+    g2.setPaint(Color.RED);
+    
+    g2.fillOval(3, 3, 1, 1);
+    
+  
+    
+    
+    g2.setTransform(cs);
+    
+  }
+  
+  
+  
 
 
 
