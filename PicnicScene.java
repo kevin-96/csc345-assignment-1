@@ -1,4 +1,12 @@
 
+/*
+ * Assignment 1 - CSC345
+ * Developers: Kevin Sangurima, Phillip Nam, Ryan Clark
+ * Description: This code draws a picinc scene. The main template comes from the book and then we did
+ *              modification in order to adapt it to our scene. For any information about the code
+ *              please contact one of the deveopers.
+ *
+ */
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -7,7 +15,9 @@ import javax.swing.*;
 public class PicnicScene extends JPanel {
     public static void main(String[] args) {
         JFrame window;
-        window = new JFrame("Transformers: Graphics in Disguise!"); // The parameter shows in the window title bar.
+        window = new JFrame("Why do java programmers have to wear glasses? //Because they can't C#..."); // Small
+                                                                                                         // programmer
+                                                                                                         // joke
         PicnicScene panel = new PicnicScene(); // Create the panel
         window.setContentPane(panel); // Add panel to the main window pane
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // End program when window closes.
@@ -35,8 +45,8 @@ public class PicnicScene extends JPanel {
                              // set up by calling the applyLimits method. It can be used
                              // for setting line widths, for example.
     private int frameNumber = 0; // Which frame we are on... Used in animation.
- //   private int[] xSeeSaw=[0,5,0]
-   // private int[] ySeeSaw=[]
+    // private int[] xSeeSaw=[0,5,0]
+    // private int[] ySeeSaw=[]
 
     /**
      * This constructor sets up a PicnicScene when it is created. Here, it sets the
@@ -44,7 +54,7 @@ public class PicnicScene extends JPanel {
      * be used by the pack() command in the main() routine.)
      */
     public PicnicScene() {
-        setPreferredSize(new Dimension(1000, 1000)); // Set size of drawing area, in pixels.
+        setPreferredSize(new Dimension(1100, 1000)); // Set size of drawing area, in pixels.
     }
 
     /**
@@ -67,7 +77,8 @@ public class PicnicScene extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         /*
-         * Fill in the entire drawing area with a black background.
+         * Fill in the entire drawing area with the grass and the sky each with it's
+         * respective color
          */
         g2.setPaint(new Color(0, 191, 255));
         g2.fillRect(0, 0, getWidth(), getHeight() / 2); // From the old graphics API!
@@ -75,7 +86,7 @@ public class PicnicScene extends JPanel {
         g2.setPaint(new Color(124, 252, 0));
         g2.fillRect(0, getHeight() / 2, getWidth(), getHeight() / 2); // From the old graphics API!
 
-        g2.setPaint(new Color(248,24,148));//hot pink
+        g2.setPaint(new Color(248, 24, 148));// hot pink
         g2.setStroke(new BasicStroke(2 * pixelSize));
         // Draw y-axis and its tick marks
 
@@ -103,21 +114,14 @@ public class PicnicScene extends JPanel {
     private void drawScene(Graphics2D g2) {
         // drawCoordinateFrame(g2, 10); // 10 is the number of "ticks" to show
 
-        // Scene version 1
         AffineTransform cs = g2.getTransform(); // Save current "coordinate system" transform
-        g2.scale(.3,.3); // No scaling yet, but setting it up to make a tad bigger
-        // drawMainScene(g2);
-      drawLake(g2);
-      drawSeeSaw(g2);
-      drawTree(g2);
-      drawSun(g2);
-      drawBird(g2);
-drawBlanket(g2);
+        g2.scale(.3, .3); // No scaling yet, but setting it up to make a tad bigger
+        drawMainScene(g2);
     }
 
     private void drawLake(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
-        g2.setPaint(new Color(0,0,255)); // Blue
+        g2.setPaint(new Color(0, 0, 255)); // Blue
         Path2D lake = new Path2D.Double();
         lake.moveTo(1000, 0);
         lake.curveTo(500, -400, 500, -400, 0, 0);
@@ -125,92 +129,131 @@ drawBlanket(g2);
         g2.translate(-300, 725); // Center it a little more around original origin
         g2.fill(lake); // Now draw it
         g2.setTransform(cs);
-      
+
     }
+
     private void drawBird(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
-        Arc2D arc=new Arc2D.Double(10, 35, .5, .25, 0, -180,Arc2D.OPEN);
+        Arc2D arc = new Arc2D.Double(10, 35, .5, .25, 0, -180, Arc2D.OPEN);
         g2.setPaint(Color.BLACK);
-      //  g2.drawArc(10, 35, 1, 1, -20, -200);
+        // g2.drawArc(10, 35, 1, 1, -20, -200);
         g2.draw(arc);
-    
-     //   g2.rotate(Math.PI/4);
-        //g2.translate(10,35);
+
+        // g2.rotate(Math.PI/4);
+        // g2.translate(10,35);
         g2.setTransform(cs);
-        
+
     }
-  
-  private void drawBag(Graphics2D g2) {
-      AffineTransform cs = g2.getTransform();
-//      Arc2D arc=new Arc2D.Double(10, 35, .5, .25, 0, -180,Arc2D.OPEN);
-      g2.setPaint(Color.BLACK);
-    //  g2.drawArc(10, 35, 1, 1, -20, -200);
-//      g2.draw(arc);
-    
-    //   g2.rotate(Math.PI/4);
-      //g2.translate(10,35);
-      g2.setTransform(cs);
-    
-  }
-  
-  private void drawBlanket(Graphics2D g2) {
-    AffineTransform cs = g2.getTransform();
-    g2.setPaint(Color.GRAY);
-    
-    g2.shear(.8, 0);
-    
-    g2.translate(6, 1);
-    
-    g2.fillRect(0, 0, 10, 12);
-    
-    g2.shear(-.8, 0);
-    
-    g2.translate(5, 5);
-    
-    g2.setPaint(Color.RED);
-    
-    g2.fillOval(3, 3, 1, 1);
-    
-  
-    
-    
-    g2.setTransform(cs);
-    
-  }
-  
-  
-  
 
+    private void drawBag(Graphics2D g2) {
+        AffineTransform cs = g2.getTransform();
+        g2.setPaint(new Color(92, 77, 57));
 
+        g2.fillRect(21, 12, 3, 2);
+        // g2.translate(0, 1);
 
+        g2.draw(new Arc2D.Double(21.5, 13, 2, 2, 0, -180, Arc2D.OPEN));
 
-    private void drawSun(Graphics2D g2){
+        g2.setTransform(cs);
+
+    }
+
+    private void drawBlanket(Graphics2D g2) {
+        AffineTransform cs = g2.getTransform();
+        g2.setPaint(new Color(207, 185, 151));
+        g2.shear(.8, 0);
+        g2.translate(6, 1);
+        g2.fillRect(0, 0, 10, 12);
+
+        g2.shear(-.8, 0);
+        g2.translate(5, 5);
+        g2.setPaint(Color.RED);
+        g2.fillOval(3, 3, 1, 1);
+
+        g2.setPaint(Color.BLACK);
+        g2.setStroke(new BasicStroke(10 * pixelSize));
+        g2.draw(new Line2D.Double(5.7,2.25,4,2.25));
+        g2.draw(new Line2D.Double(6.4,3,4,0));
+        g2.draw(new Line2D.Double(4,0,2.5,0));
+        g2.draw(new Line2D.Double(2.5,0,1.8,-2));
+  
+        g2.fill(new Ellipse2D.Double(6,2,2.7,2.7));
+        g2.setColor(Color.WHITE);
+        g2.fill(new  Ellipse2D.Double(6.25,2.25,2.2,2.2));
+
+        g2.setTransform(cs);
+
+    }
+
+    private void drawSun(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
         int sunHeight = 10;
-        g2.scale(4,4.3);
-        g2.setPaint(new Color(255, 255, 0, 255)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(4, sunHeight, 1.7, 1.7)); // lower left X, lower left Y, width, height
+        double diameterModifier = 0;
+        int alphaModifier = 0;
 
-        g2.setPaint(new Color(255, 255, 0, 204)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.8, sunHeight-.2, 2.1, 2.1)); // lower left X, lower left Y, width, height
+        if ((0 <= frameNumber % 125) && (frameNumber % 125 <= 25)) {
+            alphaModifier = 4;
+            diameterModifier = 0.007;
+        } else if ((25 < frameNumber % 125) && (frameNumber % 125 <= 50)) {
+            alphaModifier = 8;
+            diameterModifier = 0.012;
+        } else if ((50 < frameNumber % 125) && (frameNumber % 125 <= 75)) {
+            alphaModifier = 5;
+            diameterModifier = 0.008;
+        } else if ((75 < frameNumber % 125) && (frameNumber % 125 <= 100)) {
+            alphaModifier = 10;
+            diameterModifier = 0.015;
+        } else if ((frameNumber % 125) > 100) {
+            alphaModifier = 6;
+            diameterModifier = 0.010;
+        }
 
-        g2.setPaint(new Color(255, 255, 0, 153)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.6, sunHeight-.4, 2.5, 2.5)); // lower left X, lower left Y, width, height
+        g2.scale(4, 4.3);
+        g2.setPaint(new Color(255, 255, 0, 255 - alphaModifier)); // Set color to yellow
+        g2.fill(new Ellipse2D.Double(4, sunHeight, 1.7 - diameterModifier, 1.7 - diameterModifier)); // lower left X,
+                                                                                                     // lower left Y,
+                                                                                                     // width, height
 
-        g2.setPaint(new Color(255, 255, 0, 102)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.4, sunHeight-.6, 2.9, 2.9)); // lower left X, lower left Y, width, height
+        g2.setPaint(new Color(255, 255, 0, 204 - alphaModifier)); // Set color to yellow
+        g2.fill(new Ellipse2D.Double(3.8, sunHeight - .2, 2.1 - diameterModifier, 2.1 - diameterModifier)); // lower
+                                                                                                            // left X,
+                                                                                                            // lower
+                                                                                                            // left Y,
+                                                                                                            // width,
+                                                                                                            // height
 
-        g2.setPaint(new Color(255, 255, 0, 51)); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(3.2, sunHeight-.8, 3.3, 3.3)); // lower left X, lower left Y, width, height
+        g2.setPaint(new Color(255, 255, 0, 153 - alphaModifier)); // Set color to yellow
+        g2.fill(new Ellipse2D.Double(3.6, sunHeight - .4, 2.5 - diameterModifier, 2.5 - diameterModifier)); // lower
+                                                                                                            // left X,
+                                                                                                            // lower
+                                                                                                            // left Y,
+                                                                                                            // width,
+                                                                                                            // height
+
+        g2.setPaint(new Color(255, 255, 0, 102 - alphaModifier)); // Set color to yellow
+        g2.fill(new Ellipse2D.Double(3.4, sunHeight - .6, 2.9 - diameterModifier, 2.9 - diameterModifier)); // lower
+                                                                                                            // left X,
+                                                                                                            // lower
+                                                                                                            // left Y,
+                                                                                                            // width,
+                                                                                                            // height
+
+        g2.setPaint(new Color(255, 255, 0, 51 - alphaModifier)); // Set color to yellow
+        g2.fill(new Ellipse2D.Double(3.2, sunHeight - .8, 3.3 - diameterModifier, 3.3 - diameterModifier)); // lower
+                                                                                                            // left X,
+                                                                                                            // lower
+                                                                                                            // left Y,
+                                                                                                            // width,
+                                                                                                            // height
 
         g2.setTransform(cs);
     }
 
     private void drawSeeSaw(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
-     
-//base
-        g2.setPaint(new Color(58,95,11));
+
+        // base
+        g2.setPaint(new Color(58, 95, 11));
         Path2D base = new Path2D.Double();
         g2.setStroke(new BasicStroke(4 * pixelSize));
         base.moveTo(-8.5, 2.5);
@@ -219,280 +262,83 @@ drawBlanket(g2);
         base.closePath();
         g2.fill(base);
 
-           //seesaw
-           g2.setPaint(new Color(248,24,148));//hot pink
-           g2.setStroke(new BasicStroke(1));
-      
-          g2.draw(new Line2D.Double(-14, 4, 3, 8.65));
+        // seesaw
+        g2.setPaint(new Color(200, 0, 200));// hot pink
+        g2.setStroke(new BasicStroke(1));
 
-        
-      //Left person 
-      g2.setStroke(new BasicStroke(15 * pixelSize));
-      g2.setColor(Color.BLACK);
-      g2.draw(new Line2D.Double(-11.32, 10.25, -11.32, 4.65));
-      g2.draw(new Line2D.Double(-11.32, 9, -8.32, 5.6));
-      g2.draw(new Line2D.Double(-11.32, 4.65, -9.32, 3.6));
-      g2.draw(new Line2D.Double(-9.32, 3.6, -11.32, 2.6));
-      g2.fill(new  Ellipse2D.Double(-14,10,5.5,5.5));
-      g2.setColor(Color.WHITE);
-      g2.fill(new  Ellipse2D.Double(-13.75,10.25,5,5));
-     
-       
-    //right person
-    g2.setColor(Color.BLACK);
-    g2.draw(new Line2D.Double(2.6,14,2.6,8.5));
-    g2.draw(new Line2D.Double(2.6,13.5,.6,8.5));
-    g2.draw(new Line2D.Double(2.6,8.5,2,6.5));
-    g2.draw(new Line2D.Double(2,6.5,1.8,4.5));
+        g2.draw(new Line2D.Double(-14, 4, 3, 8.65));
 
+        // Left person
+        g2.setStroke(new BasicStroke(15 * pixelSize));
+        g2.setColor(Color.BLACK);
+        g2.draw(new Line2D.Double(-11.32, 10.25, -11.32, 4.65));
+        g2.draw(new Line2D.Double(-11.32, 9, -8.32, 5.6));
+        g2.draw(new Line2D.Double(-11.32, 4.65, -9.32, 3.6));
+        g2.draw(new Line2D.Double(-9.32, 3.6, -11.32, 2.6));
+        g2.fill(new Ellipse2D.Double(-14, 10, 5.5, 5.5));
+        g2.setColor(Color.WHITE);
+        g2.fill(new Ellipse2D.Double(-13.75, 10.25, 5, 5));
 
-    g2.fill(new  Ellipse2D.Double(-0.25,14,5.5,5.5));
-    g2.setColor(Color.WHITE);
-    g2.fill(new  Ellipse2D.Double(-0,14.25,5,5));
+        // right person
+        g2.setColor(Color.BLACK);
+        g2.draw(new Line2D.Double(2.6, 14, 2.6, 8.5));
+        g2.draw(new Line2D.Double(2.6, 13.5, .6, 8.5));
+        g2.draw(new Line2D.Double(2.6, 8.5, 2, 6.5));
+        g2.draw(new Line2D.Double(2, 6.5, 1.8, 4.5));
 
-       // g2.scale(4, 4);
+        g2.fill(new Ellipse2D.Double(-0.25, 14, 5.5, 5.5));
+        g2.setColor(Color.WHITE);
+        g2.fill(new Ellipse2D.Double(-0, 14.25, 5, 5));
+
+        // g2.scale(4, 4);
         // g2.translate(2, 0);
         g2.setTransform(cs);
-        //g2.drawPolygon(xPoints, yPoints, nPoints);
-//Triangle 58,95,11
-// Wood
-// 200,0,200
+        // g2.drawPolygon(xPoints, yPoints, nPoints);
+        // Triangle 58,95,11
+        // Wood
+        // 200,0,200
 
     }
-private void drawTree(Graphics2D g2){
-    AffineTransform cs = g2.getTransform();
-    Path2D Trunk = new Path2D.Double();
-    g2.setPaint(new Color(83,53,10)); //brown
-    g2.setStroke(new BasicStroke(4 * pixelSize));
-    Trunk.moveTo(-18.5,17.5);
-    //Trunk.curveTo(-12, 5.5, -9, 7.5, 0, 0);
-    Trunk.lineTo(-18.5,7.5);
- 
-    Trunk.closePath();
-    g2.draw(Trunk);
-    g2.setPaint(new Color(58,95,11)); // dark green
-    g2.fill(new Ellipse2D.Double(-21.5, 16.5, 12, 12));
-    g2.setTransform(cs);
 
+    private void drawTree(Graphics2D g2) {
+        AffineTransform cs = g2.getTransform();
+        Path2D Trunk = new Path2D.Double();
+        g2.setPaint(new Color(83, 53, 10)); // brown
+        g2.setStroke(new BasicStroke(4 * pixelSize));
+        Trunk.moveTo(-17.5, 17);
+        // Trunk.lineTo(-20,4.5); //This is the next point location (Debug)
+        Trunk.curveTo(-17.5, 8, -19, 6, -20.5, 4.5);
+        Trunk.lineTo(-16.0, 6.0);
+        Trunk.lineTo(-14.3, 3.5);
+        Trunk.lineTo(-13.0, 6.7);
+        Trunk.lineTo(-8.8, 5.1);
+        Trunk.curveTo(-11.0, 7.0, -12.9, 10, -13.5, 17);
+        Trunk.closePath();
+        g2.setPaint(new Color(85, 57, 11)); // Brown
+        g2.fill(Trunk);
+        g2.draw(Trunk);
+        g2.setPaint(new Color(58, 95, 11)); // Dark Green
+        g2.fill(new Ellipse2D.Double(-22.5, 16.5, 14, 14));
+        g2.scale(1.2,1.2);
+        g2.setTransform(cs);
+        
+    }
     
-
-}
     private void drawMainScene(Graphics2D g2) {
+        drawLake(g2);
+        drawTree(g2);
         {
             AffineTransform cs = g2.getTransform();
-            g2.setPaint(new Color(255, 0, 0)); // red
-            g2.scale(3, 3);
-            drawHouseWithChimney(g2);
+            g2.translate(45, 0);
+            drawTree(g2);
             g2.setTransform(cs);
         }
-
-        {
-            AffineTransform cs = g2.getTransform();
-            g2.setPaint(Color.BLUE);
-            g2.translate(-1, 0);
-            g2.scale(0.1, 0.1);
-            drawMailbox(g2);
-            g2.setTransform(cs);
-        }
-
-        // A little "bench"
-        g2.setPaint(new Color(0, 255, 0)); // Set color to green (or Color.GREEN)
-        g2.fill(new Rectangle2D.Double(3, 0.1, 1, 0.4)); // x, y, width, height
-
-        // A swingset
-        {
-            AffineTransform save = g2.getTransform();
-            g2.setPaint(Color.GREEN);
-            g2.setStroke(new BasicStroke(4 * pixelSize));
-            g2.translate(-5, 0);
-            g2.scale(0.4, 0.4);
-            drawSwingSet(g2);
-            g2.setTransform(save);
-        }
-
-        // A "sun"
-        int sunHeight = 10;
-        g2.setPaint(Color.YELLOW); // Set color to yellow
-        g2.fill(new Ellipse2D.Double(4, sunHeight, 2, 2)); // lower left X, lower left Y, width, height
-
-        // A group of sunflowers
-        {
-            AffineTransform save = g2.getTransform();
-            g2.translate(4, 0);
-            g2.scale(0.2, 0.2); // Scale these flowers down! But they are still HUGE!!!
-            double[] heights = { 4.0, 6.0, 3.0, 4.5, 5.5 };
-            int[] petals = { 10, 15, 8, 7, 12 };
-            drawSunflowerGarden(g2, heights, petals);
-            g2.setTransform(save);
-        }
-
-        // Draw cloud over the sun but moving left
-        {
-            AffineTransform save = g2.getTransform();
-            g2.setPaint(new Color(240, 240, 240, 200));
-            double dx = ((frameNumber + 150) % 600) * 0.05; // The mod helps it "wrap" around
-            g2.translate(15 - dx, sunHeight); // Move it up and over with the framenumber used for animation...
-            drawCloud(g2);
-            g2.setTransform(save);
-        }
-    }
-
-    /**
-     * Draw a coordinate frame
-     */
-    private void drawCoordinateFrame(Graphics2D g2, int length) {
-        g2.setPaint(Color.WHITE);
-        g2.setStroke(new BasicStroke(2 * pixelSize));
-        // Draw y-axis and its tick marks
-        g2.draw(new Line2D.Double(0, 0, 0, length)); // Y-axis
-        for (int i = 1; i <= length; i++)
-            g2.draw(new Line2D.Double(-0.2, i, 0.2, i));
-
-        // Draw x-axis and its tick marks
-        g2.draw(new Line2D.Double(0, 0, length, 0));
-        for (int i = 1; i <= length; i++)
-            g2.draw(new Line2D.Double(i, -0.2, i, 0.2));
-    }
-
-    /**
-     * Draw a garden of sunflowers
-     * 
-     * @param g2     The drawing environment
-     * @param height The array of heights
-     * @param petals The number of petals for each sunflower The size of the array
-     *               for height and petals should match
-     */
-    private void drawSunflowerGarden(Graphics2D g2, double[] height, int[] petals) {
-        AffineTransform cs = g2.getTransform(); // Save C.S. state
-        assert (height.length == petals.length);
-        for (int i = 0; i < height.length; i++) {
-            drawSunflower(g2, height[i], petals[i]);
-            g2.translate(4, 0);
-        }
-        g2.setTransform(cs); // And restore it...
-    }
-
-    /**
-     * Draw a simple sunflower
-     * 
-     * @param g2        The drawing environment
-     * @param height    The height of the stalk (relative to sunflower shape)
-     * @param numPetals The number of petals to generate around the center (times
-     *                  two actually) The origin of the sunflower is designed to be
-     *                  the base of the stalk
-     */
-    private void drawSunflower(Graphics2D g2, double height, int numPetals) {
-        AffineTransform cs = g2.getTransform(); // Save C.S. state
-        g2.setColor(new Color(0, 150, 0)); // Dark green
-        g2.fill(new Rectangle2D.Double(-0.25, 0, 0.5, height)); // Draw stalk
-        {
-            // Draw one leaf
-            AffineTransform cs2 = g2.getTransform(); // Save C.S. state
-            g2.translate(0, height / 4.0);
-            g2.rotate(Math.PI / 6);
-            g2.fill(new Ellipse2D.Double(0, -0.1, 1, 0.2));
-            g2.setTransform(cs2);
-        }
-        {
-            // Draw second leaf
-            AffineTransform cs2 = g2.getTransform(); // Save C.S. state
-            g2.translate(0, height / 2.0);
-            g2.rotate(-Math.PI / 8);
-            g2.scale(-1, 1); // Reflect it about y-axis
-            g2.fill(new Ellipse2D.Double(0, -0.08, 1.2, 0.16));
-            g2.setTransform(cs2);
-        }
-
-        g2.translate(0, height); // Move to top of stalk
-
-        // Draw the petals (first layer)
-        AffineTransform cs2 = g2.getTransform(); // Save C.S. state
-        g2.setColor(new Color(240, 240, 0));
-        double rotation = 2 * Math.PI / numPetals;
-        for (int i = 0; i < numPetals; i++) {
-            g2.fill(new Ellipse2D.Double(0, -0.25, 3, 0.5));
-            g2.rotate(rotation); // Next petal is slightly rotated
-        }
-        g2.rotate(rotation / 2); // Slight adjustment for next layer
-        g2.setColor(new Color(255, 255, 0, 200));
-        for (int i = 0; i < numPetals; i++) {
-            g2.fill(new Ellipse2D.Double(0, -0.25, 2.5, 0.5));
-            g2.rotate(rotation); // Next petal is slightly rotated
-        }
-        g2.setTransform(cs2);
-
-        // Draw the flower center
-        g2.setColor(new Color(160, 82, 45)); // "Sienna"
-        g2.fill(new Ellipse2D.Double(-0.75, -0.75, 1.5, 1.5)); // lower left X, lower left Y, width, height
-
-        g2.setTransform(cs); // Restore previous C.S. state
-    }
-
-    private void drawSwingSet(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform(); // Save C.S. state
-        Path2D frame = new Path2D.Double();
-        frame.moveTo(0, 0);
-        frame.lineTo(1, 4);
-        frame.lineTo(2, 0);
-        frame.moveTo(1, 4);
-        frame.lineTo(7, 4);
-        frame.lineTo(6, 0);
-        frame.moveTo(7, 4);
-        frame.lineTo(8, 0);
-        frame.moveTo(3, 4);
-        frame.lineTo(3, 1);
-        frame.lineTo(5, 1);
-        frame.lineTo(5, 4);
-        g2.draw(frame);
-        g2.setTransform(cs); // Restore previous C.S. state
-    }
-
-    private void drawCloud(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform(); // Save C.S. state
-        Path2D cloud = new Path2D.Double();
-        cloud.moveTo(64, 112); // These coordinates were used because that was the frame
-        cloud.curveTo(32, 144, 0, 48, 64, 64); // of reference when I drew them in a separate drawing program!
-        cloud.curveTo(32, 16, 112, 16, 112, 64);
-        cloud.curveTo(144, 16, 192, 16, 192, 80);
-        cloud.curveTo(240, 16, 304, 160, 192, 144);
-        cloud.curveTo(240, 192, 64, 192, 112, 128);
-        cloud.curveTo(96, 160, 48, 144, 64, 112);
-        cloud.closePath();
-        g2.scale(0.02, 0.02); // Big cloud needs to shrink a bit
-        g2.translate(-100, -100); // Center it a little more around original origin
-        g2.fill(cloud); // Now draw it
-        g2.setTransform(cs); // Restore previous C.S. state
-    }
-
-    private void drawMailbox(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform(); // Save C.S. state
-        g2.fill(new Rectangle2D.Double(0, 0, 1, 5));
-        g2.fill(new Rectangle2D.Double(0, 5, 4, 2));
-        g2.setTransform(cs); // Restore previous C.S. state
-    }
-
-    private void drawHouseWithChimney(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform(); // Save C.S. state
-        drawHouse(g2);
-        g2.translate(0.8, 0.8);
-        g2.scale(0.1, 0.4);
-        drawHouse(g2);
-        g2.setTransform(cs); // Restore previous C.S. state
-    }
-
-    /**
-     * Draw a simple house as a closed polygonal path
-     */
-    private void drawHouse(Graphics2D g2) {
-        Path2D poly = new Path2D.Double();
-        poly.moveTo(0, 0);
-        poly.lineTo(0, 1);
-        poly.lineTo(0.5, 1.5);
-        poly.lineTo(1, 1);
-        poly.lineTo(1, 0);
-        poly.closePath();
-
-        g2.fill(poly);
+        
+        drawSeeSaw(g2);
+        drawSun(g2);
+        drawBird(g2);
+        drawBlanket(g2);
+        drawBag(g2);
     }
 
     /**

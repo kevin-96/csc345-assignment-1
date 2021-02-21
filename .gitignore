@@ -1,0 +1,2 @@
+## Removes all Java class files from being uploaded to git
+*.class
