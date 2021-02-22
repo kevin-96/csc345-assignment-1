@@ -133,15 +133,35 @@ public class PicnicScene extends JPanel {
     }
 
     private void drawBird(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform();
-        Arc2D arc = new Arc2D.Double(10, 35, .5, .25, 0, -180, Arc2D.OPEN);
+        AffineTransform cs = g2.getTransform(); // Save state
+        Path2D bird = new Path2D.Double();
         g2.setPaint(Color.BLACK);
-        // g2.drawArc(10, 35, 1, 1, -20, -200);
-        g2.draw(arc);
+        g2.setStroke(new BasicStroke(20 * pixelSize)); //Thick bird
 
-        // g2.rotate(Math.PI/4);
-        // g2.translate(10,35);
-        g2.setTransform(cs);
+        // double controlPointModifier = 0.0; // Center control point (bird's body)
+        // if (0 <= frameNumber % 300) {
+        //     controlPointModifier = 0.8; // Bird's body comes up
+        // } else if (300 < frameNumber % 600) {
+        //     controlPointModifier = -0.8; // Bird's body goes back down
+        // }
+
+        double controlPointModifier = ((frameNumber+150)%600)*0.005; // Center control point (bird's body)
+        if ((0 <= frameNumber % 125) && (frameNumber % 125 <= 25)) {
+            controlPointModifier *= -1;
+        } else if ((25 < frameNumber % 125) && (frameNumber % 125 <= 50)) {
+            controlPointModifier *= -1;
+        }
+
+        // The bird's shape
+        bird.moveTo(1.5,0); // Starting from right wing (control point)
+        bird.curveTo(1.0,0.1,0,0,0,-0.4+controlPointModifier); // Center of bird (control point)
+        bird.curveTo(0,0,-1.0,0.1,-1.5,0); // Left wing (control point) of bird
+
+        g2.translate(8,33); // Move the bird to the sky
+        g2.scale(0.3,0.4); // Scale the bird's size down
+        g2.draw(bird);
+
+        g2.setTransform(cs); // Restore save state
 
     }
 
@@ -336,7 +356,18 @@ public class PicnicScene extends JPanel {
         
         drawSeeSaw(g2);
         drawSun(g2);
-        drawBird(g2);
+
+        // Bird flying away towards the left and slightly upward
+        {
+            AffineTransform save = g2.getTransform();
+            double dx = ((frameNumber+150)%600)*0.013;  // The mod helps it "wrap" around
+            double dy = ((frameNumber+150)%600)*0.002;  // The mod helps it "wrap" around
+            g2.translate(0-dx, 0+dy);  // Move it left and upward with the framenumber used for animation...
+            drawBird(g2);
+            g2.setTransform(save);
+        }
+
+
         drawBlanket(g2);
         drawBag(g2);
     }
