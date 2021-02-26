@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<!-- Assignment 1 - CSC345
+
+	Developers: Kevin Sangurima, Phillip Nam, Ryan Clark
+
+	Description: This code draws a picinc scene. The main template comes from the book and then we did modification in order to adapt it to our scene. For any information about the code please contact one of the deveopers.
+-->
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" 
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        width="6in" height="4in" 
+        viewBox="0 0 600 400"
+        preserveAspectRatio="xMidYMid">
+
+    <!-- The scene description goes here!  -->
+    <defs>
+       <circle id="tlake" cx="0" cy="0" r="100"/> <!-- Lake -->
+       <circle id="tsun" cx="0" cy="0" r="40"/> <!-- Sun -->
+
+       <g id="tshape" stroke="black" stroke-width="5">
+           <line x1="0" y1="0" x2="100" y2="0"/>
+           <line x1="100" y1="30" x2="100" y2="-30"/>
+       </g>
+
+       <!-- Tree -->
+       <g id="tree">
+       		<!-- Trunk -->
+           <svg x="100" y="100">
+  		   		<path fill="rgb(91,61,6)" stroke="red" stroke-width="2"
+  		   			  d="M 100,100 Q 0,0 50,200" />
+		   </svg>
+           <circle cx="80" cy="80" r="75" fill="rgb(69,105,6)"/> <!-- Leaves -->
+       </g>
+       
+    </defs>
+
+    <rect x="0" y="0" width="600" height="400" fill="white" stroke="black" stroke-width="2"/> <!-- Border Test -->
+
+    <!--CREATING BACKGROUND COMPONENTS-->
+    <rect x="0" y="200" width="600" height="200" fill="rgb(145,249,0)"/> <!-- Grass -->
+	<g transform="translate(245,120) scale(2.7,1.6)">
+		<use xlink:href="#tlake" fill="rgb(26,35,255)" transform="translate(20,20)"/> <!-- Lake -->
+	</g>
+	<!-- Since the lake is made using a circle, the sky is drawn after in order to hide the top half of the lake -->
+    <rect x="0" y="0" width="600" height="200" fill="rgb(54,198,254)"/> <!-- Sky -->
+
+    <use xlink:href="#tree"/>
+
+
+     
+</svg>
