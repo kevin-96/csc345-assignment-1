@@ -30,7 +30,8 @@ public class PicnicScene extends JPanel {
         final long startTime = System.currentTimeMillis();
         animationTimer = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                panel.frameNumber++; // Advance to the "next" frame.
+                // panel.frameNumber++; // Advance to the "next" frame.
+                panel.advanceScene();
                 panel.repaint();
             }
         });
@@ -46,6 +47,12 @@ public class PicnicScene extends JPanel {
                              // for setting line widths, for example.
     private int frameNumber = 0; // Which frame we are on... Used in animation.
 
+    double birdHeight = -0.4; // Center control point (bird's body in starting position)
+    double birdHeightDy = 0.04;
+    double birdHeightMax = 0.4;
+    double birdHeightMin = -0.4;
+
+
     /**
      * This constructor sets up a PicnicScene when it is created. Here, it sets the
      * size of the drawing area. (The size is set as a "preferred size," which will
@@ -54,6 +61,25 @@ public class PicnicScene extends JPanel {
     public PicnicScene() {
         setPreferredSize(new Dimension(1100, 1000)); // Set size of drawing area, in pixels.
     }
+
+
+    /**
+     * This function advances the scene by one frame.
+    */
+    protected void advanceScene() {
+        frameNumber++;
+        //Updating the bird so that it simulates a flapping motion
+        birdHeight += birdHeightDy;
+        if (birdHeight >= birdHeightMax) {
+            birdHeight = birdHeightMax;
+            birdHeightDy = -birdHeightDy;
+        }
+        else if (birdHeight <= birdHeightMin) {
+            birdHeight = birdHeightMin;
+            birdHeightDy = -birdHeightDy;
+        }
+    }
+
 
     /**
      * The paintComponent method draws the content of the JPanel. The parameter is a
@@ -131,15 +157,22 @@ public class PicnicScene extends JPanel {
     }
 
     private void drawBird(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform();
-        Arc2D arc = new Arc2D.Double(10, 35, .5, .25, 0, -180, Arc2D.OPEN);
+        AffineTransform cs = g2.getTransform(); // Save state
+        Path2D bird = new Path2D.Double();
         g2.setPaint(Color.BLACK);
-        // g2.drawArc(10, 35, 1, 1, -20, -200);
-        g2.draw(arc);
+        g2.setStroke(new BasicStroke(20 * pixelSize)); //Thick bird
 
-        // g2.rotate(Math.PI/4);
-        // g2.translate(10,35);
-        g2.setTransform(cs);
+        // The bird's shape
+        bird.moveTo(1.5,0); // Starting from right wing (control point)
+        bird.curveTo(1.0,-birdHeight,0,0,0,birdHeight); // Center of bird (control point)
+        bird.curveTo(0,0,-1.0,-birdHeight,-1.5,0); // Left wing (control point) of bird
+
+        g2.translate(8,33); // Move the bird to the sky
+        g2.scale(0.3,0.4); // Scale the bird's size down
+        // System.out.println(frameNumber); // Debug
+        g2.draw(bird);
+
+        g2.setTransform(cs); // Restore save state
 
     }
 
@@ -335,7 +368,24 @@ public class PicnicScene extends JPanel {
         
         drawSeeSaw(g2);
         drawSun(g2);
-        drawBird(g2);
+
+        // Bird flying away towards the left and slightly upward
+        {
+            AffineTransform save = g2.getTransform();
+
+            // double dx = ((frameNumber+150)%600)*0.013;  // The mod helps it "wrap" around
+            // double dy = ((frameNumber+150)%600)*0.002;  // The mod helps it "wrap" around
+            // g2.translate(0-dx, 0+dy);  // Move it left and upward with the framenumber used for animation...
+
+            double dx = (frameNumber+150)*0.013;  // Bird keeps flying left (no wrap around)
+            double dy = (frameNumber+150)*0.002;  // Bird keeps flying up (no wrap around)
+            g2.translate(0-dx, 0+dy);  // Move it left and upward with the framenumber used for animation...
+
+            drawBird(g2);
+            g2.setTransform(save);
+        }
+
+
         drawBlanket(g2);
         drawBag(g2);
     }
