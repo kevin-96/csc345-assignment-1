@@ -46,8 +46,6 @@ public class PicnicScene extends JPanel {
                              // set up by calling the applyLimits method. It can be used
                              // for setting line widths, for example.
     private int frameNumber = 0; // Which frame we are on... Used in animation.
-    // private int[] xSeeSaw=[0,5,0]
-    // private int[] ySeeSaw=[]
 
     double birdHeight = -0.4; // Center control point (bird's body in starting position)
     double birdHeightDy = 0.04;
@@ -358,6 +356,7 @@ public class PicnicScene extends JPanel {
     }
     
     private void drawMainScene(Graphics2D g2) {
+        System.out.println(frameNumber);
         drawLake(g2);
         drawTree(g2);
         {

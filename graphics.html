@@ -1,514 +1,511 @@
 <!DOCTYPE html>
 <html>
-<!--
+  <!--
    This page is a modification of the HierarchySceneDeux from the Java Graphics2D example,
-   combined with the GraphicsPlusStarter.html from the textbook.   
+   It is a picninc scene that was assigned to us by our proffessor. 
 
    Original Author: David Eck
-   Modified by: Christian Duncan
+   V1 - Modified by: Christian Duncan
+   V2 - Modified by: Kevin Sangurima, Ryan Clark, Phillip Nam
    Spring 2021, CSC345.
-
-   This web page shows how to use 2D canvas graphics.  It defines a function
-   applyWindowtoViewportTransformation for setting up a coordinate system on
-   the canvas.  It defines a function addGraphicsContextExtras to add some
-   extra drawing functions to a graphics context, such as functions for drawing
-   lines and ovals.  Use this page as a basis for experimenting with canvasg
-   graphics.  Modify the draw() function to define what is shown in the canvas.
--->
-<head>
-<meta charset="UTF-8">
-<title>Picnic Scene</title>
-<style>
-    /* This style section is here to make the canvas more obvious on the
+  -->
+  <head>
+    <meta charset="UTF-8" />
+    <title>Picnic Scene</title>
+    <style>
+      /* This style section is here to make the canvas more obvious on the
        page.  It is white on a light gray page background, with a thin
        black border. */
-    body {
-        background-color: #DDDDDD;
-    }
-    canvas {
+      body {
+        background-color: #dddddd;
+      }
+      canvas {
         background-color: black;
         display: block;
-    }
-    #canvasholder {
-        border:2px solid black;
+      }
+      #canvasholder {
+        border: 2px solid black;
         float: left; /* This makes the border exactly fit the canvas. */
-    }
-</style>
-<script>
+      }
+    </style>
+    <script>
+      "use strict"; // gives improved error-checking in scripts.
+      var canvas; // The canvas element on which we will draw.
+      var graphics; // A 2D graphics context for drawing on the canvas.
+      var pixelSize; // The size of a pixel in the coordinate system; set up by
+      var frameNumber = 0; // Which frame we are on... Used in animation.
 
-    "use strict";  // gives improved error-checking in scripts.
+      /**
+       *  The draw() function is called by init() after the page loads,
+       *  to draw the content of the canvas.  At the start, clear the canvas
+       *  and save a copy of the state; restore the state at the end.  (These
+       *  actions are not necessary in this program, since the function will
+       *  only be called once.)
+       */
+      function draw() {
+        graphics.clearRect(0, 0, 1100, 1000); // Clear the canvas, so it shows its background color.
+        graphics.save(); // Push graphics context state onto a stack.
 
-    var canvas;    // The canvas element on which we will draw.
-    var graphics;  // A 2D graphics context for drawing on the canvas.
-    var pixelSize; // The size of a pixel in the coordinate system; set up by
-                   //    applyWindowToViewportTransform function when it is called.
-    var frameNumber = 0; // Which frame we are on... Used in animation.
-      
-    /**
-     *  The draw() function is called by init() after the page loads,
-     *  to draw the content of the canvas.  At the start, clear the canvas
-     *  and save a copy of the state; restore the state at the end.  (These
-     *  actions are not necessary in this program, since the function will
-     *  only be called once.)
-     */
-    function draw() {
-        graphics.clearRect(0,0,1100,1000);  // Clear the canvas, so it shows its background color.
-        graphics.save();  // Push graphics context state onto a stack.
-        
         /* Here, I set up a new coordinate system on the drawing area, by calling
          * the applyLimits() method that is defined below.  Without this call, I
          * would be using regular pixel coordinates.  This funciton is defined below.
          * It sets the value of the global variable pixelSize, which I need for
          * line widths in the transformed coordinate system.
          */
-        
-        applyWindowToViewportTransformation(-5,10,-1,14,true);
-        
+        applyWindowToViewportTransformation(-5, 10, -1, 14, true);
+
         /* Draw a few shapes as an example.  Note that graphics.strokeOval
          * graphics.fillOval, graphics.strokeLine, graphics.strokePoly, and
          * graphics.fillPoly are not ordinarily a part of a canvas graphics
          * context.  They were added to the graphics context in this program
          * by calling addGraphicsContextExtras(graphics) in the init() function.
          */
-
         drawScene();
+        graphics.restore();
+      }
 
-        /*
-        graphics.fillStyle = "yellow";
-        graphics.fillOval(0,0,6,1);
-        graphics.strokeStyle= "blue";
-        graphics.lineWidth = 5*pixelSize; // This will be 5 pixels wide, taking into account the coordinate transform.
-        graphics.strokeOval(0,0,6,1);
-        
-        graphics.strokeStyle = "black";
-        graphics.lineWidth = 10*pixelSize;
-        graphics.strokeLine( -5, -5, 5, 5 );
-        graphics.strokeLine( -5, 5, 5, -5 );
-        
-        graphics.beginPath();  // Make an hexagonal path
-        graphics.moveTo(3,0);
-        for (var i = 1; i < 6; i++) {
-            var angle = (2*Math.PI/6) * i;
-            graphics.lineTo( 3*Math.cos(angle), 3*Math.sin(angle) );
+      /**
+       * Draw the scene
+       */
+      function drawScene() {
+        graphics.save();
+        drawBackground();
+        graphics.scale(1, 1);
+        drawMainScene();
+        graphics.restore();
+      }
+
+      /**
+       * BEGINNING OF CUSTOM CODE.
+       */
+      function drawBackground() {
+        graphics.save();
+        graphics.fillStyle = "rgb(0, 191, 255)"; // Set color to sky blue.
+        graphics.fillRect(-5, 6.5, 15, 7.5); // x, y, width, height
+        graphics.fillStyle = "rgb(124, 252, 0)"; // Set color to green.
+        graphics.fillRect(-5, -1, 15, 7.5); // x, y, width, height
+        graphics.restore();
+      }
+
+      function drawMainScene() {
+        // The Lake
+        {
+          graphics.save();
+          graphics.beginPath();
+          graphics.fillStyle = "#0000FF";
+          graphics.moveTo(-4, 6.5);
+          graphics.lineTo(9, 6.5);
+          graphics.bezierCurveTo(2, 2.5, 3, 2.5, -4, 6.5);
+          graphics.closePath();
+          graphics.fill();
+          graphics.restore();
         }
+
+        // Picninc blanket
+        {
+          graphics.save();
+          graphics.translate(2.75, 1);
+          drawBlanket();
+          graphics.restore();
+        }
+
+        // The bag (of money???)
+        {
+          graphics.save();
+          graphics.translate(6.1, 3.5);
+          graphics.fillStyle = "rgb(92,77,57)";
+          graphics.fillRect(0, 0, 0.9, 0.72);
+          graphics.lineWidth = 0.075;
+          graphics.beginPath();
+          graphics.arc(0.45, 0.72, 0.3, 0, Math.PI);
+          graphics.strokeStyle = "rgb(92,77,57)";
+          graphics.stroke();
+          graphics.restore();
+        }
+
+        // The Apple
+        {
+          graphics.save();
+          graphics.fillStyle = "rgb(255, 0, 0)";
+          graphics.fillCircle(5, 3.3, 0.085);
+          graphics.restore();
+        }
+
+        // Guy laying on blanket (Next to the bag of money???)
+        {
+          graphics.save();
+          graphics.translate(5.8, 3);
+          graphics.fillStyle = "rgb(255, 255, 255)";
+          graphics.fillCircle(0, 0, 0.34);
+          graphics.strokeStyle = "rgb(0,0,0)";
+          graphics.lineWidth = 0.042;
+          graphics.strokeCircle(0, 0, 0.34);
+          graphics.strokeLine(-0.25, -0.25, -0.75, -0.75);
+          graphics.strokeLine(-0.35, -0.35, -0.85, -0.35);
+          graphics.strokeLine(-1.1, -0.71, -0.75, -0.75);
+          graphics.strokeLine(-1.1, -0.71, -1.2, -1.1);
+          graphics.restore();
+        }
+
+        // Trees
+        {
+          graphics.save();
+          graphics.translate(-3.85, 1.55);
+          drawTree();
+          graphics.translate(11, 0);
+          drawTree();
+          graphics.restore();
+        }
+
+        // Sun
+        {
+          graphics.save();
+          var sunHeight = 14;
+          var size = 1.3;
+          graphics.fillStyle = '#FDFD00FF';
+          graphics.fillCircle(5, sunHeight, size);
+          graphics.fillStyle = '#FDFD00AA';
+          graphics.fillCircle(5, sunHeight, 1.25 * size);
+          graphics.fillStyle = '#FDFD0088';
+          graphics.fillCircle(5, sunHeight, 1.5 * size);
+          graphics.fillStyle = '#FDFD0055';
+          graphics.fillCircle(5, sunHeight, 1.75 * size);
+          graphics.fillStyle = '#FDFD0033';
+          graphics.fillCircle(5, sunHeight, 2 * size);
+          graphics.restore();
+        }
+
+        // Birdddd.
+        {
+          drawDaBird();
+        }
+
+        // Seesaw
+        {
+          drawSeeSaw();
+        }
+
+        // Right person on seesaw
+        {
+          graphics.save();
+          //translates and does rotation
+          graphics.translate(2.1, 4.1);
+          graphics.scale(1.5, 1.5);
+          graphics.rotate((Math.PI / 180) * 48);
+          graphics.fillStyle = "rgb(255, 255, 255)";
+
+          // stick figure head
+          graphics.fillCircle(0, 0, 0.34);
+          graphics.strokeStyle = 'rgb(0,0,0)';
+          graphics.lineWidth = 0.042;
+          graphics.strokeCircle(0, 0, 0.34);
+
+          //stick figure body
+          graphics.strokeLine(-0.25, -0.25, -0.75, -0.75);
+          graphics.strokeLine(-0.35, -0.35, -1, -0.6);
+          graphics.strokeLine(-1.1, -0.91, -0.75, -0.75);
+          graphics.strokeLine(-1.1, -0.91, -1.4, -1.25);
+
+          graphics.restore();
+        }
+
+        // Left person on seesaw
+        {
+          graphics.save();
+          //translates and does rotation
+          graphics.translate(-1.8, 2.5);
+          graphics.scale(1.5, 1.5);
+          graphics.rotate((Math.PI / 180) * 50);
+          graphics.fillStyle = 'rgb(255, 255, 255)';
+
+          // stick figure head
+          graphics.fillCircle(0, 0, 0.34);
+          graphics.strokeStyle = 'rgb(0,0,0)';
+          graphics.lineWidth = 0.042;
+          graphics.strokeCircle(0, 0, 0.34);
+
+          //stick figure body
+          graphics.strokeLine(-0.25, -0.25, -0.75, -0.75);
+          graphics.strokeLine(-0.35, -0.35, -0.48, -0.89);
+          graphics.strokeLine(-0.65, -1.2, -0.75, -0.75);
+          graphics.strokeLine(-1.05, -0.91, -0.65, -1.2);
+
+          graphics.restore();
+        }
+      }
+
+      /**
+       * Draw blanket.
+       */
+      function drawBlanket() {
+        graphics.fillStyle = "rgb(207,185,151)";
+        graphics.transform(1, 0, 0.8, 1, 0, 0);
+        graphics.fillRect(0, 0, 2.5, 3);
+      }
+
+      /**
+       * Draw tree.
+       */
+      function drawTree() {
+        graphics.fillStyle = "#53350AFF";
+        graphics.beginPath();
+        graphics.moveTo(0, 4);
+        graphics.bezierCurveTo(0.2, 3, 0.3, 1.5, -0.85, -0.85);
+        graphics.lineTo(0.4, -0.3);
+        graphics.lineTo(1.1, -1);
+        graphics.lineTo(1.5, 0);
+        graphics.lineTo(2.7, -0.5);
+        graphics.bezierCurveTo(1.4, 1.5, 1.6, 3, 2, 4);
+        graphics.lineTo(0, 4);
         graphics.closePath();
-        graphics.fillStyle = "red";
-        graphics.globalAlpha = 0.4; // drawing will be translucent, 40% opaque.
         graphics.fill();
-        graphics.globalAlpha = 1.0; // restore 100% opacity.
-        graphics.strokeStyle = "red";
-        graphics.lineWidth = 3*pixelSize;
+        graphics.beginPath();
+        graphics.fillStyle = "#3A5F0BFF"; // Leafs
+        graphics.fillCircle(0.9, 5.2, 2.2);
+        graphics.closePath();
+      }
+
+      /**
+       * Draw a seesaw.
+       */
+      function drawSeeSaw() {
+        graphics.save();
+        graphics.translate(0.2, 1.7);
+        graphics.scale(1.5, 1.5);
+        graphics.beginPath();
+        graphics.moveTo(0, 0);
+        graphics.lineTo(-0.5, -Math.sqrt(3) / 2.0);
+        graphics.lineTo(0.5, -Math.sqrt(3) / 2.0);
+        graphics.closePath();
+        graphics.fillStyle = "#3A5F0B";
+        graphics.fill();
+
+        let angle = Math.PI / 8;
+        let lengthOfLine = 1.65; // Peepee length
+        graphics.beginPath();
+        graphics.moveTo(
+          Math.cos(Math.PI + angle) * lengthOfLine,
+          Math.sin(Math.PI + angle) * lengthOfLine
+        );
+        graphics.lineTo(
+          Math.cos(angle) * lengthOfLine,
+          Math.sin(angle) * lengthOfLine
+        );
+        graphics.strokeStyle = "#C800C8";
+        graphics.lineWidth = 0.1;
         graphics.stroke();
-        
-        // We can also use the new fillPoly/strokePoly functions to draw simple polygons.
-        graphics.fillStyle = "#008800";
-        graphics.fillPoly( 5,3, 6,3, 5.5,2 ); // A triangle
-        graphics.fillPoly( -5,3, -5.5,4, -6,3, -5.5,2);  // A diamond
-        
-        graphics.fillRect(-6,-3,1,1);  // And there are still rectangles, which are part of the original graphics context.
-        graphics.fillRect(4,-3,2,1);
-        */
-        
-        graphics.restore();  // Pop the saved graphics context state.   DO NOT FORGET THIS STEP!!!        
-    } // end of draw()
-    
-  /**
-   * Draw the scene
-  */
-  function drawScene() {
-      graphics.save();
-      drawCoordinateFrame(10);
-
-      graphics.scale(1,1);
-      drawMainScene();
-      
-      graphics.restore();
-  }
-
-  function drawMainScene() {
-      // The house
-      {
-          graphics.save();
-          graphics.fillStyle = "red";
-          graphics.scale(3,3);
-          drawHouseWithChimney();
-          graphics.restore();
-      }
-
-      // The mailbox
-      {
-          graphics.save();
-          graphics.fillStyle = "blue";
-          graphics.translate(-1, 0);
-          graphics.scale(0.1, 0.1);
-          drawMailbox();
-          graphics.restore();
-      }
-
-      // A little "bench"
-      graphics.fillStyle = "rgb(0, 255, 0)";  // Set color to green.  "green" would also work.
-      graphics.fillRect(3, 0.1, 1, 0.4); // x, y, width, height
-
-      // A swingset
-      {
-          graphics.save();
-          graphics.strokeStyle = "green";
-          graphics.lineWidth = 4*pixelSize;
-          graphics.translate(-5, 0);
-          graphics.scale(0.4, 0.4);
-          drawSwingSet();
-          graphics.restore();
-      }
-
-      // A "sun"
-      var sunHeight = 10;
-      graphics.fillStyle = "yellow";
-      graphics.fillOval(5, sunHeight+1, 1, 1);   // Function exists because we ADDED it to the graphics context (note difference from Java version)
-
-      // A group of sunflowers
-      {
-          graphics.save();
-          graphics.translate(4, 0);
-          graphics.scale(0.2, 0.2);    // Scale these flowers down! But they are still HUGE!!!
-          var heights = [ 4.0, 6.0, 3.0, 4.5, 5.5 ];
-          var petals = [ 10, 15, 8, 7, 12 ];
-          drawSunflowerGarden(heights, petals);
-          graphics.restore();
-      }
-      
-      // Draw cloud over the sun but moving left
-      {
-          graphics.save();
-          graphics.fillStyle = "rgb(240, 240, 240)";
-          graphics.alpha = 200;
-          var dx = ((frameNumber+150)%600)*0.05;  // The mod helps it "wrap" around
-          graphics.translate(15-dx, sunHeight);  // Move it up and over with the framenumber used for animation...
-          drawCloud();
-          graphics.restore();
-      }
-  }
-
-  /**
-   * Draw a coordinate frame
-   */
-  function drawCoordinateFrame(length) {
-      graphics.save();
-      graphics.strokeStyle = "white";
-      graphics.lineWidth = 2*pixelSize; // This will be 2 pixels wide, taking into account the coordinate transform.
-
-      // Draw the y-axis and its tick marks
-      graphics.strokeLine(0, 0, 0, length);   // This only works because we ADDED this function to graphics
-      for (var i = 1; i <= length; i++)
-          graphics.strokeLine(-0.2, i, 0.2, i);
-
-      // Draw x-axis and its tick marks
-      graphics.strokeLine(0, 0, length, 0);
-      for (var i = 1; i <= length; i++)
-          graphics.strokeLine(i, -0.2, i, 0.2);
-      graphics.restore();
-  }
-
-    /**
-     * Draw a garden of sunflowers
-     * @param heights The array of heights
-     * @param petals The number of petals for each sunflower
-     * The size of the array for height and petals should match
-     */
-    function drawSunflowerGarden(heights, petals) {
-        graphics.save();
-        console.assert(heights.length == petals.length, { heights: heights.length, petals: petals.length });
-        for (var i = 0; i < heights.length; i++) {
-            drawSunflower(heights[i], petals[i]);
-            graphics.translate(4, 0);
-        }
         graphics.restore();
-    }
+      }
 
-    /**
-     * Draw a simple sunflower
-     * @param g2 The drawing environment
-     * @param height The height of the stalk (relative to sunflower shape)
-     * @param numPetals The number of petals to generate around the center (times two actually)
-     * The origin of the sunflower is designed to be the base of the stalk
-     */
-    function drawSunflower(height, numPetals) {
+      /**
+       * Bird bird bird, bird is da word.
+       */
+      function drawDaBird() {
+        let size = 0.1;
+        let x = 3.0;
+        let y = 9.0;
         graphics.save();
-        graphics.fillStyle = "rgb(0, 150, 0)";    // Dark green
-        graphics.fillRect(-0.25, 0, 0.5, height); // Draw stalk
-        {
-            // Draw one leaf
-            graphics.save();
-            graphics.translate(0, height/4.0);
-            graphics.rotate(Math.PI/6);
-            graphics.fillOval(0.5, 0, 0.5, 0.1); 
-            graphics.restore();
-        }
-        {
-            // Draw second leaf
-            graphics.save();
-            graphics.translate(0, height/2.0);
-            graphics.rotate(-Math.PI/8);
-            graphics.scale(-1, 1);  // Reflect it about y-axis
-            graphics.fillOval(0.6, 0, 0.6, 0.08); 
-            graphics.restore();
-        }
+        graphics.beginPath();
+        graphics.lineWidth = 0.04;
+        graphics.arc(x - size, y, size, 0, Math.PI - 0.5); // x, y, radius, startAngle, endAngle [, anticlockwise]
+        graphics.stroke();
 
-        graphics.translate(0, height); // Move to top of stalk
-
-        // Draw the petals (first layer)
-        graphics.save();
-        graphics.fillStyle = "rgb(240, 240, 0)";
-        var rotation = 2*Math.PI/numPetals;
-        for (var i = 0; i < numPetals; i++) {
-            graphics.fillOval(1.5, 0, 1.5, 0.25);
-            graphics.rotate(rotation);  // Next petal is slightly rotated
-        }
-        graphics.rotate(rotation/2);  // Slight adjustment for next layer
-        graphics.fillStyle = "rgb(255, 255, 0";
-        graphics.alpha = 200;
-        for (var i = 0; i < numPetals; i++) {
-            graphics.fillOval(1.25, 0, 1.25, 0.25);
-            graphics.rotate(rotation);  // Next petal is slightly rotated
-        }
+        graphics.beginPath();
+        graphics.arc(x + size, y, size, 0.5, Math.PI);
+        graphics.stroke();
         graphics.restore();
-        
-        // Draw the flower center
-        graphics.fillStyle = "rgb(160,82,45)";  // Sienna
-        graphics.fillOval(0, 0, 0.75, 0.75);
-        graphics.restore();
-    }
+      }
 
-  /**
-   * Draw a very simple swing set
-   */
-  function drawSwingSet() {
-      graphics.save();
-      // We will do this one in class!
-      graphics.restore();
-  }
+      /**
+       * END OF CUSTOM CODE.
+       */
 
-  /**
-   * Draw a very simple cloud
-   */
-  function drawCloud() {
-      graphics.save();
-      graphics.fillRect(0, 0, 1, 1);  // We will do this one in class!  Time permitting!
-      graphics.restore();
-  }
-
-  /**
-   * Draw a very simple mail box
-   */
-  function drawMailbox() {
-      graphics.save();
-      graphics.fillRect(0, 0, 1, 5);
-      graphics.fillRect(0, 5, 4, 2);
-      graphics.restore();
-  }
-
-  /**
-   * Draw a simple house with a chimney
-   */
-  function drawHouseWithChimney() {
-      graphics.save();
-      drawHouse();
-      graphics.translate(0.8, 0.8);
-      graphics.scale(0.1, 0.4);
-      drawHouse();
-      graphics.restore();
-  }
-
-  /**
-   * Draw a simple house as a closed polygonal path
-   */
-  function drawHouse() {
-      graphics.save();
-      graphics.beginPath();
-      graphics.moveTo(0, 0);
-      graphics.lineTo(0, 1);
-      graphics.lineTo(0.5, 1.5);
-      graphics.lineTo(1, 1);
-      graphics.lineTo(1, 0);
-      graphics.closePath();
-      graphics.fill();
-      graphics.restore();
-  }
-
-    /**
-     * Sets up a transformation in the graphics context so that the canvas will
-     * show x-values in the range from left to right, and y-values in the range
-     * from bottom to top.  If preserveAspect is true, then one of the ranges
-     * will be increased, if necessary, to account for the aspect ratio of the
-     * canvas.  This function sets the global variable pixelsize to be the
-     * size of a pixel in the new coordinate system.  (If preseverAspect is
-     * true, pixelSize is the maximum of its horizontal and vertical sizes.)
-     */
-    function applyWindowToViewportTransformation(left,right,bottom,top,preserveAspect) {
+      /**
+       * Sets up a transformation in the graphics context so that the canvas will
+       * show x-values in the range from left to right, and y-values in the range
+       * from bottom to top.  If preserveAspect is true, then one of the ranges
+       * will be increased, if necessary, to account for the aspect ratio of the
+       * canvas.  This function sets the global variable pixelsize to be the
+       * size of a pixel in the new coordinate system.  (If preseverAspect is
+       * true, pixelSize is the maximum of its horizontal and vertical sizes.)
+       */
+      function applyWindowToViewportTransformation(
+        left,
+        right,
+        bottom,
+        top,
+        preserveAspect
+      ) {
         var displayAspect, windowAspect;
         var excess;
         var pixelwidth, pixelheight;
         if (preserveAspect) {
-            // Adjust the limits to match the aspect ratio of the drawing area.
-            displayAspect = Math.abs(canvas.height / canvas.width);
-            windowAspect = Math.abs(( top-bottom ) / ( right-left ));
-            if (displayAspect > windowAspect) {
-                // Expand the viewport vertically.
-                excess = (top-bottom) * (displayAspect/windowAspect - 1)
-                top = top + excess/2
-                bottom = bottom - excess/2
-            }
-            else if (displayAspect < windowAspect) {
-                // Expand the viewport vertically.
-                excess = (right-left) * (windowAspect/displayAspect - 1)
-                right = right + excess/2
-                left = left - excess/2	
-            }
+          // Adjust the limits to match the aspect ratio of the drawing area.
+          displayAspect = Math.abs(canvas.height / canvas.width);
+          windowAspect = Math.abs((top - bottom) / (right - left));
+          if (displayAspect > windowAspect) {
+            // Expand the viewport vertically.
+            excess = (top - bottom) * (displayAspect / windowAspect - 1);
+            top = top + excess / 2;
+            bottom = bottom - excess / 2;
+          } else if (displayAspect < windowAspect) {
+            // Expand the viewport vertically.
+            excess = (right - left) * (windowAspect / displayAspect - 1);
+            right = right + excess / 2;
+            left = left - excess / 2;
+          }
         }
-        graphics.scale( canvas.width / (right-left), canvas.height / (bottom-top) )
-        graphics.translate( -left, -top );
-        pixelwidth =  Math.abs(( right - left ) / canvas.width);
-        pixelheight = Math.abs(( bottom - top ) / canvas.height);
-        pixelSize = Math.max(pixelwidth,pixelheight);
-    }  // end of applyWindowToViewportTransformation()
+        graphics.scale(
+          canvas.width / (right - left),
+          canvas.height / (bottom - top)
+        );
+        graphics.translate(-left, -top);
+        pixelwidth = Math.abs((right - left) / canvas.width);
+        pixelheight = Math.abs((bottom - top) / canvas.height);
+        pixelSize = Math.max(pixelwidth, pixelheight);
+      }
 
+      /**
+       * This function can be called to add a collection of extra drawing function to
+       * a graphics context, to make it easier to draw basic shapes with that context.
+       * The parameter, graphics, must be a canvas 2d graphics context.
+       *
+       * The following new functions are added to the graphics context:
+       *
+       *    graphics.strokeLine(x1,y1,x2,y2) -- stroke the line from (x1,y1) to (x2,y2).
+       *    graphics.fillCircle(x,y,r) -- fill the circle with center (x,y) and radius r.
+       *    graphics.strokeCircle(x,y,r) -- stroke the circle.
+       *    graphics.fillOval(x,y,r1,r2) -- fill oval with center (x,y) and radii r1 and r2.
+       *    graphics.stokeOval(x,y,r1,r2) -- stroke the oval
+       *    graphics.fillPoly(x1,y1,x2,y2,...) -- fill polygon with vertices (x1,y1), (x2,y2), ...
+       *    graphics.strokePoly(x1,y1,x2,y2,...) -- stroke the polygon.
+       *    graphics.getRGB(x,y) -- returns the color components of pixel at (x,y) as an array of
+       *         four integers in the range 0 to 255, in the order red, green, blue, alpha.
+       *
+       * (Note that "this" in a function that is called as a member of an object refers to that
+       * object.  Here, this will refer to the graphics context.)
+       */
+      function addGraphicsContextExtras(graphics) {
+        graphics.strokeLine = function (x1, y1, x2, y2) {
+          this.beginPath();
+          this.moveTo(x1, y1);
+          this.lineTo(x2, y2);
+          this.stroke();
+        };
+        graphics.fillCircle = function (x, y, r) {
+          this.beginPath();
+          this.arc(x, y, r, 0, 2 * Math.PI, false);
+          this.fill();
+        };
+        graphics.strokeCircle = function (x, y, radius) {
+          this.beginPath();
+          this.arc(x, y, radius, 0, 2 * Math.PI, false);
+          this.stroke();
+        };
+        graphics.fillPoly = function () {
+          if (arguments.length < 6) return;
+          this.beginPath();
+          this.moveTo(arguments[0], arguments[1]);
+          for (var i = 2; i + 1 < arguments.length; i = i + 2) {
+            this.lineTo(arguments[i], arguments[i + 1]);
+          }
+          this.closePath();
+          this.fill();
+        };
+        graphics.strokePoly = function () {
+          if (arguments.length < 4) return;
+          this.beginPath();
+          this.moveTo(arguments[0], arguments[1]);
+          for (var i = 2; i + 1 < arguments.length; i = i + 2) {
+            this.lineTo(arguments[i], arguments[i + 1]);
+          }
+          this.closePath();
+          this.stroke();
+        };
+        graphics.fillOval = function (x, y, horizontalRadius, verticalRadius) {
+          this.save();
+          this.translate(x, y);
+          this.scale(horizontalRadius, verticalRadius);
+          this.beginPath();
+          this.arc(0, 0, 1, 0, 2 * Math.PI, false);
+          this.restore();
+          this.fill();
+        };
+        graphics.strokeOval = function (
+          x,
+          y,
+          horizontalRadius,
+          verticalRadius
+        ) {
+          this.save();
+          this.translate(x, y);
+          this.scale(horizontalRadius, verticalRadius);
+          this.beginPath();
+          this.arc(0, 0, 1, 0, 2 * Math.PI, false);
+          this.restore();
+          this.stroke();
+        };
+        graphics.getRGB = function (x, y) {
+          var color = this.getImageData(x, y, 1, 1);
+          return color.data;
+        };
+      } // end of addGraphicsContextExtras()
 
-    /**
-     * This function can be called to add a collection of extra drawing function to
-     * a graphics context, to make it easier to draw basic shapes with that context.
-     * The parameter, graphics, must be a canvas 2d graphics context.
-     *
-     * The following new functions are added to the graphics context:
-     *
-     *    graphics.strokeLine(x1,y1,x2,y2) -- stroke the line from (x1,y1) to (x2,y2).
-     *    graphics.fillCircle(x,y,r) -- fill the circle with center (x,y) and radius r.
-     *    graphics.strokeCircle(x,y,r) -- stroke the circle.
-     *    graphics.fillOval(x,y,r1,r2) -- fill oval with center (x,y) and radii r1 and r2.
-     *    graphics.stokeOval(x,y,r1,r2) -- stroke the oval
-     *    graphics.fillPoly(x1,y1,x2,y2,...) -- fill polygon with vertices (x1,y1), (x2,y2), ...
-     *    graphics.strokePoly(x1,y1,x2,y2,...) -- stroke the polygon.
-     *    graphics.getRGB(x,y) -- returns the color components of pixel at (x,y) as an array of
-     *         four integers in the range 0 to 255, in the order red, green, blue, alpha.
-     *
-     * (Note that "this" in a function that is called as a member of an object refers to that
-     * object.  Here, this will refer to the graphics context.)
-     */
-    function addGraphicsContextExtras(graphics) {
-        graphics.strokeLine = function(x1,y1,x2,y2) {
-           this.beginPath();
-           this.moveTo(x1,y1);
-           this.lineTo(x2,y2);
-           this.stroke();
-        }
-        graphics.fillCircle = function(x,y,r) {
-           this.beginPath();
-           this.arc(x,y,r,0,2*Math.PI,false);
-           this.fill();
-        }
-        graphics.strokeCircle = function(x,y,radius) {
-           this.beginPath();
-           this.arc(x,y,radius,0,2*Math.PI,false);
-           this.stroke();
-        }
-        graphics.fillPoly = function() { 
-            if (arguments.length < 6)
-               return;
-            this.beginPath();
-            this.moveTo(arguments[0],arguments[1]);
-            for (var i = 2; i+1 < arguments.length; i = i + 2) { 
-               this.lineTo(arguments[i],arguments[i+1]);
-            }
-            this.closePath();
-            this.fill();
-        }
-        graphics.strokePoly = function() { 
-            if (arguments.length < 4)
-               return;
-            this.beginPath();
-            this.moveTo(arguments[0],arguments[1]);
-            for (var i = 2; i+1 < arguments.length; i = i + 2) { 
-               this.lineTo(arguments[i],arguments[i+1]);
-            }
-            this.closePath();
-            this.stroke();
-        }
-        graphics.fillOval = function(x,y,horizontalRadius,verticalRadius) {
-           this.save();
-           this.translate(x,y);
-           this.scale(horizontalRadius,verticalRadius);
-           this.beginPath();
-           this.arc(0,0,1,0,2*Math.PI,false);
-           this.restore();
-           this.fill();
-        }
-        graphics.strokeOval = function(x,y,horizontalRadius,verticalRadius) {
-           this.save();
-           this.translate(x,y);
-           this.scale(horizontalRadius,verticalRadius);
-           this.beginPath();
-           this.arc(0,0,1,0,2*Math.PI,false);
-           this.restore();
-           this.stroke();
-        }
-        graphics.getRGB = function(x,y) {
-            var color = this.getImageData(x,y,1,1);
-            return color.data;
-        }
-    }    // end of addGraphicsContextExtras()
-
-     /**
-     *  Draw one frame of the animation, and call requestAnimationFrame() to arrange
-     *  for the function to be called again.
-     */
-    function doFrame() {
+      /**
+       *  Draw one frame of the animation, and call requestAnimationFrame() to arrange
+       *  for the function to be called again.
+       */
+      function doFrame() {
         frameNumber++;
         // YOU CAN ADD UPDATE OTHER DATA FOR THE FRAME HERE.
         draw();
         requestAnimationFrame(doFrame);
-    }
-  
-    /**
-     * The init() funciton is called after the page has been
-     * loaded.  It initializes the canvas and graphics variables.
-     * It calles addGraphicsContextExtras(graphics) to add the extra
-     * drawing functions to the graphics context, and it calls draw()
-     * to draw on the canvas.
-     */
-    function init() {
+      }
+
+      /**
+       * The init() funciton is called after the page has been
+       * loaded.  It initializes the canvas and graphics variables.
+       * It calles addGraphicsContextExtras(graphics) to add the extra
+       * drawing functions to the graphics context, and it calls draw()
+       * to draw on the canvas.
+       */
+      function init() {
         try {
-            canvas = document.getElementById("canvas");
-            graphics = canvas.getContext("2d");
-        } catch(e) {
-            document.getElementById("canvasholder").innerHTML =
-               "Canvas graphics is not supported.<br>" +
-               "An error occurred while initializing graphics.";
+          canvas = document.getElementById("canvas");
+          graphics = canvas.getContext("2d");
+        } catch (e) {
+          document.getElementById("canvasholder").innerHTML =
+            "Canvas graphics is not supported.<br>" +
+            "An error occurred while initializing graphics.";
         }
-        addGraphicsContextExtras(graphics);  // Add the extra features to the graphics context
-        draw();  // Call draw() to draw on the canvas.
-        if (!window.requestAnimationFrame) { // This is for Internet Explorer 9
-            window.requestAnimationFrame = function(callback) {
-                setTimeout(callback, 1000/60);    
-            }
+        addGraphicsContextExtras(graphics); // Add the extra features to the graphics context
+        draw(); // Call draw() to draw on the canvas.
+        if (!window.requestAnimationFrame) {
+          // This is for Internet Explorer 9
+          window.requestAnimationFrame = function (callback) {
+            setTimeout(callback, 1000 / 60);
+          };
         }
         requestAnimationFrame(doFrame);
-    }
-</script>
-</head>
-<body onload="init()"> <!-- the onload attribute here is what calls the init() function -->
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <!-- the onload attribute here is what calls the init() function -->
 
-<h2>Picnic Scene</h2>
-<h3><small>How do you comfort a JS bug? You console it...</small></h3>
+    <h2>Picnic Scene</h2>
+    <h3><small>How do you comfort a JS bug? You console it...</small></h3>
 
-<noscript>
-    <!-- This message will be shown in the page if JavaScript is not available. -->
-<p>JavaScript is required to use this page.</p>
-</noscript>
+    <noscript>
+      <!-- This message will be shown in the page if JavaScript is not available. -->
+      <p>JavaScript is required to use this page.</p>
+    </noscript>
 
-<div id="canvasholder">
-<canvas id="canvas" width="1000" height="1000">
-    <!-- This message is shown on the page if the browser doesn't support the canvas element. -->
-Canvas not supported.
-</canvas>
-</div>
-
-</body>
+    <div id="canvasholder">
+      <canvas id="canvas" width="1000" height="1000">
+        <!-- This message is shown on the page if the browser doesn't support the canvas element. -->
+        Canvas not supported.
+      </canvas>
+    </div>
+  </body>
 </html>
