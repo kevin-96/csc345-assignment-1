@@ -28,27 +28,155 @@
        <!-- Tree -->
        <g id="tree">
        		<!-- Trunk -->
-           <svg x="100" y="100">
-  		   		<path fill="rgb(91,61,6)" stroke="red" stroke-width="2"
-  		   			  d="M 100,100 Q 0,0 50,200" />
-		   </svg>
-           <circle cx="80" cy="80" r="75" fill="rgb(69,105,6)"/> <!-- Leaves -->
+           <g transform="translate(235,415) scale(11,-10)">
+  		   		<path fill="rgb(91,61,6)"
+  		   			  d="
+  		   			  M -17.5,17
+  		   			  C -17.5,8 -19,6 -20.5,4.5
+  		   			  L -16,6
+  		   			  L -14.3,3.5
+  		   			  L -13,6.7
+  		   			  L -8.8,5.1
+  		   			  C -11.0,7.0 -12.9,10 -13.5,17
+  		   			  Z"
+  		   			  />
+		   </g>
+           <!-- Leaves -->
+           <g transform="translate(-15,100)">
+           		<circle cx="80" cy="80" r="78" fill="rgb(69,105,6)"/>
+       	   </g>
+       </g>
+
+       <!-- Sun -->
+       <g id="sun">
+	       	<circle cx="80" cy="80" r="75" fill="rgb(252,253,0)" fill-opacity="0.3"/> <!-- Ring 3 -->
+	       	<circle cx="80" cy="80" r="62" fill="rgb(252,253,0)" fill-opacity="0.45"/> <!-- Ring 2 -->
+       		<circle cx="80" cy="80" r="56" fill="rgb(252,253,0)" fill-opacity="0.7"/> <!-- Ring 1 -->
+       		<circle cx="80" cy="80" r="50" fill="rgb(252,253,0)" fill-opacity="1"/> <!-- Center Sun -->
+       </g>
+
+       <!-- Bird -->
+       <g id="bird">
+       		<path fill="none" stroke="black" stroke-width="3"
+       			d="
+       			M 12,0
+       			C 8,3.2 0,0 0,-3.2
+       			C 0,0 -8,3.2 -12,0"
+       			/>
+       </g>
+
+       <!-- Seesaw -->
+       <g id="seesaw">
+       		<!-- Base -->
+       		<g transform="translate(0,50)">
+       			<polygon points="0,50 35,0 70,50" fill="rgb(69,105,6)"/>
+       		</g>
+       		<!-- Platform -->
+       		<g transform="translate(-80,27) rotate(10)">
+       			<rect width="230" height="7" fill="rgb(201,39,198)"/>
+       		</g>
+       </g>
+
+       <!-- Person 1 (Straight) -->
+       <g id="person1">
+       		<!-- Body -->
+       		<g transform="translate(0,0)">
+       			<path fill="none" stroke="black" stroke-width="3"
+       			d="
+       			M 0,25
+       			L 0,70
+       			L 8,95
+       			L 0,120
+       			M 0,35
+       			L 20,85"
+       			/>
+       		</g>
+       		<!-- Head -->
+       		<g transform="translate(0,0)">
+       			<circle cx="0" cy="0" r="25" fill="white" stroke="black" stroke-width="3"/>
+       		</g>
+       </g>
+
+       <!-- Person 2 (Crouch) -->
+       <g id="person2">
+       		<!-- Body -->
+       		<g transform="translate(0,0)">
+       			<path fill="none" stroke="black" stroke-width="3"
+       			d="
+       			M 0,25
+       			L 0,80
+       			L -20,95
+       			L 0,110
+       			M 0,35
+       			L -20,75"
+       			/>
+       		</g>
+       		<!-- Head -->
+       		<g transform="translate(0,0)">
+       			<circle cx="0" cy="0" r="25" fill="white" stroke="black" stroke-width="3"/>
+       		</g>
+       </g>
+
+       <!-- Bag -->
+       <g id="bag">
+       		<!-- Handle -->
+       		<g transform="translate(-6,-36) scale(.8,.8)">
+       			<path fill="none" stroke="rgb(102,87,65)" stroke-width="2"
+       			d="
+       			M 15,50
+       			C 17,30 43,30 45,50"
+       			/>
+       		</g>
+       		<!-- Bag -->
+       		<g transform="translate(0,0)">
+       			<rect width="35" height="25" fill="rgb(102,87,65)"/>
+       		</g>
        </g>
        
+
     </defs>
 
-    <rect x="0" y="0" width="600" height="400" fill="white" stroke="black" stroke-width="2"/> <!-- Border Test -->
 
-    <!--CREATING BACKGROUND COMPONENTS-->
+	<!--CREATING BACKGROUND COMPONENTS-->
+    <rect x="0" y="0" width="600" height="400" fill="white" stroke="black" stroke-width="1"/> <!-- Border Test -->
+
     <rect x="0" y="200" width="600" height="200" fill="rgb(145,249,0)"/> <!-- Grass -->
-	<g transform="translate(245,120) scale(2.7,1.6)">
+	<g transform="translate(250,120) scale(2.4,1.5)">
 		<use xlink:href="#tlake" fill="rgb(26,35,255)" transform="translate(20,20)"/> <!-- Lake -->
 	</g>
 	<!-- Since the lake is made using a circle, the sky is drawn after in order to hide the top half of the lake -->
     <rect x="0" y="0" width="600" height="200" fill="rgb(54,198,254)"/> <!-- Sky -->
+	<g transform="translate(360,-60) scale(0.8,0.8)">
+    	<use xlink:href="#sun"/> <!-- Sun -->
+	</g>
+    <use xlink:href="#tree"/> <!-- Left Tree -->
 
-    <use xlink:href="#tree"/>
+	<g transform="translate(355,285) scale(2.8,3)">
+		<polygon points="0,30 30,30 55,0 25,0" fill="rgb(211,193,161)"/> <!-- Blanket -->
+	</g>
+	<g transform="translate(455,273) scale(1,1)">
+    	<use xlink:href="#bag"/> <!-- Bag -->
+	</g>
+	<circle cx="420" cy="305" r="3" fill="red"/> <!-- Red Ball -->
+	<!-- Person 2 laying on the blanket -->
+	<g transform="translate(455,315) scale(0.5,0.5) rotate(50)">
+    	<use xlink:href="#person2"/>
+	</g>
 
-
+    <g transform="translate(460,0) scale(1,1)">
+    	<use xlink:href="#tree"/> <!-- Right Tree -->
+	</g>
+	<g transform="translate(300,110) scale(0.7,-0.8)">
+    	<use xlink:href="#bird"/> <!-- Bird -->
+	</g>
+	<g transform="translate(160,280) scale(1,1)">
+    	<use xlink:href="#seesaw"/> <!-- Seesaw -->
+	</g>
+	<g transform="translate(280,268) scale(1,1)">
+    	<use xlink:href="#person2"/> <!-- Person 2 on the seesaw -->
+	</g>
+	<g transform="translate(100,232) scale(1,1)">
+    	<use xlink:href="#person1"/> <!-- Person 1 on the seesaw -->
+	</g>
      
 </svg>
