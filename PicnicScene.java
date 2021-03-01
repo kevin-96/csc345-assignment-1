@@ -51,6 +51,8 @@ public class PicnicScene extends JPanel {
     double birdHeightDy = 0.04;
     double birdHeightMax = 0.4;
     double birdHeightMin = -0.4;
+    double seeSawAngle=0; //in Radians seeSaw begins at a straight line position
+    double seeSawAngleD=0.01;
 
 
     /**
@@ -77,6 +79,16 @@ public class PicnicScene extends JPanel {
         else if (birdHeight <= birdHeightMin) {
             birdHeight = birdHeightMin;
             birdHeightDy = -birdHeightDy;
+        }
+        //creates the seeSaw animation
+        seeSawAngle +=seeSawAngleD;
+        if(seeSawAngle >= Math.PI/9) {
+            seeSawAngle=Math.PI/9;
+            seeSawAngleD = -seeSawAngleD;
+        }
+        else if(seeSawAngle <= -Math.PI/9) {
+            seeSawAngle=-Math.PI/9;
+            seeSawAngleD = -seeSawAngleD;
         }
     }
 
@@ -169,7 +181,6 @@ public class PicnicScene extends JPanel {
 
         g2.translate(8,33); // Move the bird to the sky
         g2.scale(0.3,0.4); // Scale the bird's size down
-        // System.out.println(frameNumber); // Debug
         g2.draw(bird);
 
         g2.setTransform(cs); // Restore save state
@@ -280,56 +291,81 @@ public class PicnicScene extends JPanel {
         g2.setTransform(cs);
     }
 
-    private void drawSeeSaw(Graphics2D g2) {
-        AffineTransform cs = g2.getTransform();
+   //creates the seesaw
+   private void drawSeeSaw(Graphics2D g2) {
+    AffineTransform cs = g2.getTransform();
+    double heightSeeSaw=6;
+    double personDistance=7;
+    // base
+    
+    g2.setPaint(new Color(58, 95, 11));
+    Path2D base = new Path2D.Double();
+    g2.setStroke(new BasicStroke(4 * pixelSize));
+    base.moveTo(-8.5, 2.5);
+    base.lineTo(-3.5, 2.5);
+    base.lineTo(-6, heightSeeSaw);
+    base.closePath();
+    g2.fill(base);
+   
 
-        // base
-        g2.setPaint(new Color(58, 95, 11));
-        Path2D base = new Path2D.Double();
-        g2.setStroke(new BasicStroke(4 * pixelSize));
-        base.moveTo(-8.5, 2.5);
-        base.lineTo(-3.5, 2.5);
-        base.lineTo(-6, 6);
-        base.closePath();
-        g2.fill(base);
+    // seesaw
+   
+    g2.setPaint(new Color(200, 0, 200));// hot pink
 
-        // seesaw
-        g2.setPaint(new Color(200, 0, 200));// hot pink
-        g2.setStroke(new BasicStroke(1));
+    g2.setStroke(new BasicStroke(1));
 
-        g2.draw(new Line2D.Double(-14, 4, 3, 8.65));
-
-        // Left person
-        g2.setStroke(new BasicStroke(15 * pixelSize));
-        g2.setColor(Color.BLACK);
-        g2.draw(new Line2D.Double(-11.32, 10.25, -11.32, 4.65));
-        g2.draw(new Line2D.Double(-11.32, 9, -8.32, 5.6));
-        g2.draw(new Line2D.Double(-11.32, 4.65, -9.32, 3.6));
-        g2.draw(new Line2D.Double(-9.32, 3.6, -11.32, 2.6));
-        g2.fill(new Ellipse2D.Double(-14, 10, 5.5, 5.5));
-        g2.setColor(Color.WHITE);
-        g2.fill(new Ellipse2D.Double(-13.75, 10.25, 5, 5));
-
-        // right person
-        g2.setColor(Color.BLACK);
-        g2.draw(new Line2D.Double(2.6, 14, 2.6, 8.5));
-        g2.draw(new Line2D.Double(2.6, 13.5, .6, 8.5));
-        g2.draw(new Line2D.Double(2.6, 8.5, 2, 6.5));
-        g2.draw(new Line2D.Double(2, 6.5, 1.8, 4.5));
-
-        g2.fill(new Ellipse2D.Double(-0.25, 14, 5.5, 5.5));
-        g2.setColor(Color.WHITE);
-        g2.fill(new Ellipse2D.Double(-0, 14.25, 5, 5));
-
-        // g2.scale(4, 4);
-        // g2.translate(2, 0);
-        g2.setTransform(cs);
-        // g2.drawPolygon(xPoints, yPoints, nPoints);
-        // Triangle 58,95,11
-        // Wood
-        // 200,0,200
-
+g2.rotate(seeSawAngle,-6,heightSeeSaw); //causes seeSaw to rotate
+    
+    g2.draw(new Line2D.Double(-14, heightSeeSaw, 2, heightSeeSaw));
+    //Creates left person
+    {
+    AffineTransform cs2 = g2.getTransform();
+    g2.translate(-6-personDistance,heightSeeSaw);
+    g2.rotate(-seeSawAngle);
+    drawPerson(g2, heightSeeSaw-2.5-personDistance*Math.sin(seeSawAngle));
+    g2.setTransform(cs2);
     }
+//Creates right person
+    {
+        AffineTransform cs2 = g2.getTransform();
+        g2.translate(-6+personDistance,heightSeeSaw);
+        g2.rotate(-seeSawAngle);
+        g2.scale(-1,1);//flip it
+        drawPerson(g2, heightSeeSaw-2.5-personDistance*Math.sin(-seeSawAngle));
+        g2.setTransform(cs2);
+        }
+  
+  
+
+    
+    g2.setTransform(cs);
+    
+
+}
+private void drawPerson(Graphics2D g2, double heightToGround) {
+AffineTransform cs = g2.getTransform();
+// Left person
+g2.setStroke(new BasicStroke(15 * pixelSize));
+g2.setColor(Color.BLACK);
+g2.draw(new Line2D.Double(0, 5.6, 0, 0));
+
+g2.draw(new Line2D.Double(0, 4.35, 3, 1));
+double legLength=4;
+if(heightToGround>.9*legLength) {
+  heightToGround=.9*legLength;
+}//creates the bend 
+
+//Calculates the coordinate of the knee using the Pythagorean Theorem
+double kneeX=Math.sqrt(legLength*legLength - heightToGround*heightToGround)/2;
+g2.draw(new Line2D.Double(0, 0, kneeX, -heightToGround/2));
+g2.draw(new Line2D.Double(kneeX, -heightToGround/2, 0, -heightToGround));
+g2.setColor(Color.WHITE);
+g2.fill(new Ellipse2D.Double(-2.5, 5.6, 5, 5));
+g2.setColor(Color.BLACK);
+g2.draw(new Ellipse2D.Double(-2.5, 5.6, 5, 5));
+
+g2.setTransform(cs);
+}
 
     private void drawTree(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
@@ -356,7 +392,6 @@ public class PicnicScene extends JPanel {
     }
     
     private void drawMainScene(Graphics2D g2) {
-        System.out.println(frameNumber);
         drawLake(g2);
         drawTree(g2);
         {
