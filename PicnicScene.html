@@ -101,7 +101,7 @@
           graphics.restore();
         }
 
-        // Picninc blanket
+        // Picnic blanket
         {
           graphics.save();
           graphics.translate(2.75, 1);
@@ -109,7 +109,7 @@
           graphics.restore();
         }
 
-        // The bag (of money???)
+        // The bag
         {
           graphics.save();
           graphics.translate(6.1, 3.5);
@@ -131,7 +131,7 @@
           graphics.restore();
         }
 
-        // Guy laying on blanket (Next to the bag of money???)
+        // Person laying on blanket
         {
           graphics.save();
           graphics.translate(5.8, 3);
@@ -147,7 +147,7 @@
           graphics.restore();
         }
 
-        // Trees
+        // Trees (Draws two trees)
         {
           graphics.save();
           graphics.translate(-3.85, 1.55);
@@ -162,22 +162,22 @@
           graphics.save();
           var sunHeight = 14;
           var size = 1.3;
-          graphics.fillStyle = '#FDFD00FF';
+          graphics.fillStyle = "#FDFD00FF";
           graphics.fillCircle(5, sunHeight, size);
-          graphics.fillStyle = '#FDFD00AA';
+          graphics.fillStyle = "#FDFD00AA";
           graphics.fillCircle(5, sunHeight, 1.25 * size);
-          graphics.fillStyle = '#FDFD0088';
+          graphics.fillStyle = "#FDFD0088";
           graphics.fillCircle(5, sunHeight, 1.5 * size);
-          graphics.fillStyle = '#FDFD0055';
+          graphics.fillStyle = "#FDFD0055";
           graphics.fillCircle(5, sunHeight, 1.75 * size);
-          graphics.fillStyle = '#FDFD0033';
+          graphics.fillStyle = "#FDFD0033";
           graphics.fillCircle(5, sunHeight, 2 * size);
           graphics.restore();
         }
 
-        // Birdddd.
+        // Bird
         {
-          drawDaBird();
+          drawBird();
         }
 
         // Seesaw
@@ -196,7 +196,7 @@
 
           // stick figure head
           graphics.fillCircle(0, 0, 0.34);
-          graphics.strokeStyle = 'rgb(0,0,0)';
+          graphics.strokeStyle = "rgb(0,0,0)";
           graphics.lineWidth = 0.042;
           graphics.strokeCircle(0, 0, 0.34);
 
@@ -216,11 +216,11 @@
           graphics.translate(-1.8, 2.5);
           graphics.scale(1.5, 1.5);
           graphics.rotate((Math.PI / 180) * 50);
-          graphics.fillStyle = 'rgb(255, 255, 255)';
+          graphics.fillStyle = "rgb(255, 255, 255)";
 
           // stick figure head
           graphics.fillCircle(0, 0, 0.34);
-          graphics.strokeStyle = 'rgb(0,0,0)';
+          graphics.strokeStyle = "rgb(0,0,0)";
           graphics.lineWidth = 0.042;
           graphics.strokeCircle(0, 0, 0.34);
 
@@ -298,9 +298,9 @@
       }
 
       /**
-       * Bird bird bird, bird is da word.
+       * Bird
        */
-      function drawDaBird() {
+      function drawBird() {
         let size = 0.1;
         let x = 3.0;
         let y = 9.0;
@@ -320,15 +320,6 @@
        * END OF CUSTOM CODE.
        */
 
-      /**
-       * Sets up a transformation in the graphics context so that the canvas will
-       * show x-values in the range from left to right, and y-values in the range
-       * from bottom to top.  If preserveAspect is true, then one of the ranges
-       * will be increased, if necessary, to account for the aspect ratio of the
-       * canvas.  This function sets the global variable pixelsize to be the
-       * size of a pixel in the new coordinate system.  (If preseverAspect is
-       * true, pixelSize is the maximum of its horizontal and vertical sizes.)
-       */
       function applyWindowToViewportTransformation(
         left,
         right,

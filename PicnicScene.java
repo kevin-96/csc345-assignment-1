@@ -30,7 +30,6 @@ public class PicnicScene extends JPanel {
         final long startTime = System.currentTimeMillis();
         animationTimer = new Timer(16, new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                // panel.frameNumber++; // Advance to the "next" frame.
                 panel.advanceScene();
                 panel.repaint();
             }
@@ -70,7 +69,7 @@ public class PicnicScene extends JPanel {
     */
     protected void advanceScene() {
         frameNumber++;
-        //Updating the bird so that it simulates a flapping motion
+        // Updating the bird's center control point so that it simulates a flapping motion
         birdHeight += birdHeightDy;
         if (birdHeight >= birdHeightMax) {
             birdHeight = birdHeightMax;
@@ -80,7 +79,7 @@ public class PicnicScene extends JPanel {
             birdHeight = birdHeightMin;
             birdHeightDy = -birdHeightDy;
         }
-        //creates the seeSaw animation
+        // Seesaw rotation animation
         seeSawAngle +=seeSawAngleD;
         if(seeSawAngle >= Math.PI/9) {
             seeSawAngle=Math.PI/9;
@@ -148,8 +147,6 @@ public class PicnicScene extends JPanel {
      * Draw the scene
      */
     private void drawScene(Graphics2D g2) {
-        // drawCoordinateFrame(g2, 10); // 10 is the number of "ticks" to show
-
         AffineTransform cs = g2.getTransform(); // Save current "coordinate system" transform
         g2.scale(.3, .3); // No scaling yet, but setting it up to make a tad bigger
         drawMainScene(g2);
@@ -165,7 +162,6 @@ public class PicnicScene extends JPanel {
         g2.translate(-300, 725); // Center it a little more around original origin
         g2.fill(lake); // Now draw it
         g2.setTransform(cs);
-
     }
 
     private void drawBird(Graphics2D g2) {
@@ -182,7 +178,6 @@ public class PicnicScene extends JPanel {
         g2.translate(8,33); // Move the bird to the sky
         g2.scale(0.3,0.4); // Scale the bird's size down
         g2.draw(bird);
-
         g2.setTransform(cs); // Restore save state
 
     }
@@ -190,35 +185,33 @@ public class PicnicScene extends JPanel {
     private void drawBag(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
         g2.setPaint(new Color(92, 77, 57));
-
-        g2.fillRect(21, 12, 3, 2);
-        // g2.translate(0, 1);
-
-        g2.draw(new Arc2D.Double(21.5, 13, 2, 2, 0, -180, Arc2D.OPEN));
-
+        g2.fillRect(21, 12, 3, 2); // Bag
+        g2.draw(new Arc2D.Double(21.5, 13, 2, 2, 0, -180, Arc2D.OPEN)); // The handle
         g2.setTransform(cs);
 
     }
 
-    private void drawBlanket(Graphics2D g2) {
+    private void drawBlanketElements(Graphics2D g2) {
         AffineTransform cs = g2.getTransform();
         g2.setPaint(new Color(207, 185, 151));
         g2.shear(.8, 0);
         g2.translate(6, 1);
-        g2.fillRect(0, 0, 10, 12);
+        g2.fillRect(0, 0, 10, 12); // The blanket (sheared)
 
         g2.shear(-.8, 0);
         g2.translate(5, 5);
-        g2.setPaint(Color.RED);
-        g2.fillOval(3, 3, 1, 1);
+        g2.setPaint(Color.RED); // Set the color of the ball to RED
+        g2.fillOval(3, 3, 1, 1); // The ball
 
+        // Stick figure body
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(10 * pixelSize));
         g2.draw(new Line2D.Double(5.7,2.25,4,2.25));
         g2.draw(new Line2D.Double(6.4,3,4,0));
         g2.draw(new Line2D.Double(4,0,2.5,0));
         g2.draw(new Line2D.Double(2.5,0,1.8,-2));
-  
+
+        // Stick figure head
         g2.fill(new Ellipse2D.Double(6,2,2.7,2.7));
         g2.setColor(Color.WHITE);
         g2.fill(new  Ellipse2D.Double(6.25,2.25,2.2,2.2));
@@ -291,7 +284,7 @@ public class PicnicScene extends JPanel {
         g2.setTransform(cs);
     }
 
-   //creates the seesaw
+   // Creates the seesaw
    private void drawSeeSaw(Graphics2D g2) {
     AffineTransform cs = g2.getTransform();
     double heightSeeSaw=6;
@@ -353,7 +346,7 @@ g2.draw(new Line2D.Double(0, 4.35, 3, 1));
 double legLength=4;
 if(heightToGround>.9*legLength) {
   heightToGround=.9*legLength;
-}//creates the bend 
+}// Creates the bend 
 
 //Calculates the coordinate of the knee using the Pythagorean Theorem
 double kneeX=Math.sqrt(legLength*legLength - heightToGround*heightToGround)/2;
@@ -421,7 +414,7 @@ g2.setTransform(cs);
         }
 
 
-        drawBlanket(g2);
+        drawBlanketElements(g2);
         drawBag(g2);
     }
 

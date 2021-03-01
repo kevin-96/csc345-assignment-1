@@ -6,7 +6,7 @@
 
 	Developers: Kevin Sangurima, Phillip Nam, Ryan Clark
 
-	Description: This code draws a picinc scene. The main template comes from the book and then we did modification in order to adapt it to our scene. For any information about the code please contact one of the deveopers.
+	Description: This code draws a picnic scene. For any information about the code please contact one of the deveopers.
 -->
 
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" 
@@ -15,7 +15,7 @@
         viewBox="0 0 600 400"
         preserveAspectRatio="xMidYMid">
 
-    <!-- The scene description goes here!  -->
+    <!-- Complex objects are created first in defs and are used later when describing scene  -->
     <defs>
        <circle id="tlake" cx="0" cy="0" r="100"/> <!-- Lake -->
        <circle id="tsun" cx="0" cy="0" r="40"/> <!-- Sun -->
@@ -137,7 +137,7 @@
     </defs>
 
 
-	<!--CREATING BACKGROUND COMPONENTS-->
+	<!--CREATING THE PICNIC SCENE HERE-->
     <rect x="0" y="0" width="600" height="400" fill="white" stroke="black" stroke-width="1"/> <!-- Border Test -->
 
     <rect x="0" y="200" width="600" height="200" fill="rgb(145,249,0)"/> <!-- Grass -->
@@ -158,9 +158,8 @@
     	<use xlink:href="#bag"/> <!-- Bag -->
 	</g>
 	<circle cx="420" cy="305" r="3" fill="red"/> <!-- Red Ball -->
-	<!-- Person 2 laying on the blanket -->
 	<g transform="translate(455,315) scale(0.5,0.5) rotate(50)">
-    	<use xlink:href="#person2"/>
+    	<use xlink:href="#person2"/> <!-- Person 2 laying on the blanket -->
 	</g>
 
     <g transform="translate(460,0) scale(1,1)">
